@@ -39,6 +39,7 @@ public class MessageService {
         int pageCount = messageQuery.pageCount();
 
         log.debug("... return {} / {} messages ", list.size(), count);
+
         return PagedList.<Message>builder()
                 .page(page)
                 .pageSize(size)

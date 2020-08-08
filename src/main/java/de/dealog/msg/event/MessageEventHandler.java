@@ -27,7 +27,7 @@ public class MessageEventHandler {
     @Blocking
     @Transactional
     public void process(final MessageEvent messageEvent) {
-        log.debug("Received a message event type {}", messageEvent.getType());
+        log.debug("Received message event type '{}'", messageEvent.getType());
         Message message = messageEventPayloadConverter.convert(messageEvent.getPayload());
         switch (messageEvent.getType()) {
             case Published:
@@ -37,7 +37,7 @@ public class MessageEventHandler {
             case Updated:
             case Superseded:
             default:
-                log.debug("Received event Type {} is not implemented", messageEvent.getType());
+                log.debug("Handler for message event type  '{}' is not implemented.", messageEvent.getType());
         }
     }
 

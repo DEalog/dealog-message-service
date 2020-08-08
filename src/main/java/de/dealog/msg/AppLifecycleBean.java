@@ -19,5 +19,4 @@ public class AppLifecycleBean {
     void onStop(@Observes final ShutdownEvent ev) {
         LOGGER.info("DEalog message service is stopping...");
     }
-
 }

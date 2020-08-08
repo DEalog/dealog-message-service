@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -41,8 +40,8 @@ public class MessageEntity extends PanacheEntity implements Message {
     private String description;
 
     @CreationTimestamp
-    protected LocalDateTime createdDate;
+    protected Date createdDate;
 
     @UpdateTimestamp
-    protected LocalDateTime lastModifiedDate;
+    protected Date lastModifiedDate;
 }

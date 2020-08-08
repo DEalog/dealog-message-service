@@ -1,6 +1,5 @@
 package de.dealog.msg.persistence;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface Message {
@@ -17,9 +16,9 @@ public interface Message {
 
     String getDescription();
 
-    LocalDateTime getCreatedDate();
+    Date getCreatedDate();
 
-    LocalDateTime getLastModifiedDate();
+    Date getLastModifiedDate();
 
     String toString();
 }

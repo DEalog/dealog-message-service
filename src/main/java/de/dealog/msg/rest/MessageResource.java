@@ -16,10 +16,11 @@ import javax.ws.rs.core.Response;
  * REST Resource for {@link Message}s
  */
 @Path(MessageResource.RESOURCE_PATH)
-@Produces(MediaType.APPLICATION_JSON)
+@Produces("application/de.dealog.service.message-" + MessageResource.API_VERSION)
 public class MessageResource {
 
-    public static final String RESOURCE_PATH = "/messages";
+    public static final String RESOURCE_PATH = "/api/message";
+    public static final String API_VERSION = "v1.0+json";
 
     @Inject
     MessageConverter messageConverter;
