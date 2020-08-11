@@ -20,5 +20,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
+    - name: 'Create settings.xml'
+      uses: whelk-io/maven-settings-xml-action@v9
+      with:
+        repositories: '[{ "id": "github", "name": "dealog-common", "url": "https://maven.pkg.github.com/dealog/dealog-common" }]'
+        servers: '[{"id": "github", "username": "${{ secrets.SERVER_USERNAME }}", "password": "${{ secrets.SERVER_PASSWORD }}"}]'
     - name: Build with Maven
       run: mvn -B package --file pom.xml
