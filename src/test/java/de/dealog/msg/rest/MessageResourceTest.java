@@ -40,15 +40,15 @@ class MessageResourceTest {
                 .page(0).pageSize(10).pageCount(1).count(666).content(Arrays.asList(msg_one, msg_two, msg_three)).build();
         MessageService messageService = Mockito.mock(MessageService.class);
 
-        doReturn(pagedList).when(messageService).list(0, 10);
+        doReturn(pagedList).when(messageService).list(null, 0, 10);
         QuarkusMock.installMockForType(messageService, MessageService.class);
     }
 
     @Test
     void getAll() {
         given()
-            .param("page", 0)
-            .param("size", 10)
+            .param(PageRequest.PAGE, 0)
+            .param(PageRequest.SIZE, 10)
             .when().get(MessageResource.RESOURCE_PATH)
             .then()
             .statusCode(200)

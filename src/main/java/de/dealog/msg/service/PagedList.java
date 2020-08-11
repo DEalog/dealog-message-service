@@ -12,13 +12,11 @@ public class PagedList<T> {
     /**
      * The requested page number
      */
-    @lombok.NonNull
     private final int page;
 
     /**
      * The number of entries that should be contained
      */
-    @lombok.NonNull
     private final int pageSize;
 
     /**

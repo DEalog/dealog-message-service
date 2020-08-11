@@ -33,9 +33,10 @@ public class MessageResource {
      * @return the list
      */
     @GET
-    public Response getAll(@BeanParam final PageRequest pageRequest) {
+    public Response getAll(@BeanParam final GeoRequest geoRequest, @BeanParam final PageRequest pageRequest) {
 
-        final PagedList<? extends Message> messages = messageService.list(pageRequest.getPage(), pageRequest.getSize());
+        final PagedList<? extends Message> messages = messageService.list(
+                geoRequest.getPoint(), pageRequest.getPage(), pageRequest.getSize());
         Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
 
         return Response.ok(messagesRest).build();

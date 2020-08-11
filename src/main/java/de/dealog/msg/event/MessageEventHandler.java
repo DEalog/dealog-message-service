@@ -1,8 +1,6 @@
 package de.dealog.msg.event;
 
-import de.dealog.common.model.MessageEventPayload;
 import de.dealog.common.model.MessageEvent;
-import de.dealog.common.model.MessageEventType;
 import de.dealog.msg.persistence.Message;
 import de.dealog.msg.service.MessageService;
 import io.smallrye.reactive.messaging.annotations.Blocking;
