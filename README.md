@@ -1,6 +1,6 @@
 # DEalog Message Service (DMS)
 
-![Java CI with Maven](https://github.com/DEalog/dealog-common/workflows/Java%20CI%20with%20Maven/badge.svg)
+![Java CI with Maven](https://github.com/DEalog/dealog-message-service/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 The DEalog Message Service is the delivering part of the DEalog platform, a platform
 for official communication in cases of emergency.
