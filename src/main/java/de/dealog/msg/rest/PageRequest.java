@@ -1,6 +1,5 @@
 package de.dealog.msg.rest;
 
-import io.quarkus.panache.common.Sort;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,7 +2,6 @@ package de.dealog.msg.service;
 
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.Message;
-import de.dealog.msg.persistence.MessageEntity;
 import de.dealog.msg.persistence.MessageRepository;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,8 +14,6 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest

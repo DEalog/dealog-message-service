@@ -2,7 +2,6 @@ package de.dealog.msg;
 
 import de.dealog.msg.persistence.MessageEntity;
 import de.dealog.msg.rest.MessageRest;
-import org.apache.kafka.common.protocol.types.Field;
 
 public class TestUtils {
 

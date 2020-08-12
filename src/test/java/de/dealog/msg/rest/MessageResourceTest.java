@@ -11,12 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import javax.inject.Inject;
-
 import java.util.Arrays;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.doReturn;
 
 @QuarkusTest

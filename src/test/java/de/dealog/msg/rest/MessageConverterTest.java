@@ -3,16 +3,13 @@ package de.dealog.msg.rest;
 import com.google.common.collect.Iterators;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.Message;
-import de.dealog.msg.rest.MessageConverter;
-import de.dealog.msg.rest.MessageRest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 class MessageConverterTest {

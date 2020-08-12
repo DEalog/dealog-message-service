@@ -3,7 +3,6 @@ package de.dealog.msg.rest;
 import com.google.common.base.Converter;
 import de.dealog.msg.persistence.Message;
 import de.dealog.msg.persistence.MessageEntity;
-import de.dealog.msg.rest.MessageRest;
 
 import javax.inject.Singleton;
 

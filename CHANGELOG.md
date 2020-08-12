@@ -1,7 +1,8 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
-- `NEW` Add accept header 
+- `NEW` Add Api resource to check if API version is supported 
+- `NEW` Add accept header for API versioning
 - `NEW` Message rest returns date in ISO 8601 format 
 - `NEW` Set timezone to UTC
 - `NEW` Add Event handler consumes "type: Published" 

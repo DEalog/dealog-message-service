@@ -4,11 +4,8 @@ import de.dealog.msg.persistence.Message;
 import de.dealog.msg.persistence.MessageEntity;
 import de.dealog.msg.persistence.MessageRepository;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import io.quarkus.panache.common.Page;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
