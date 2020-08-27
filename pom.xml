@@ -21,6 +21,8 @@
     <lombok.version>1.18.2</lombok.version>
     <dealog-common.version>[1.0.0-SNAPSHOT,1.0.1-SNAPSHOT)</dealog-common.version>
     <rest-assured.version>4.3.0</rest-assured.version>
+    <hibernate-spatial.version>5.4.15.Final</hibernate-spatial.version>
+    <postgis-jdbc.version>2.5.0</postgis-jdbc.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -74,6 +76,12 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-spatial</artifactId>
+      <version>${hibernate-spatial.version}</version>
     </dependency>
 
     <dependency>

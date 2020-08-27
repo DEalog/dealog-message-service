@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.geolatte.geom.Polygon;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -38,6 +39,12 @@ public class MessageEntity extends PanacheEntity implements Message {
     @NotEmpty
     @Column(columnDefinition="TEXT")
     private String description;
+
+    /**
+     * The geographic code delineating the affected area of the alert message
+     */
+    private Polygon geocode;
+
 
     @CreationTimestamp
     protected Date createdDate;

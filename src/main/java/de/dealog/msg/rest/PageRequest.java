@@ -12,11 +12,21 @@ import javax.ws.rs.QueryParam;
 @Getter
 public class PageRequest {
 
-    @QueryParam("page")
+    /**
+     *  The name of the HTTP page query parameter
+     */
+    static final String PAGE = "page";
+
+    /**
+     *  The name of the HTTP size query parameter
+     */
+    static final String SIZE = "size";
+
+    @QueryParam(PAGE)
     @DefaultValue("0")
     private int page;
 
-    @QueryParam("size")
+    @QueryParam(SIZE)
     @DefaultValue("10")
     private int size;
 }

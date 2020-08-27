@@ -1,6 +1,9 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `NEW` Message service queries point within geocode if present
+- `NEW` Add point (lang & lat) query parameters to REST message request 
+- `NEW` Enhance message model with geocode field
 - `NEW` Add Api resource to check if API version is supported 
 - `NEW` Add accept header for API versioning
 - `NEW` Message rest returns date in ISO 8601 format 
