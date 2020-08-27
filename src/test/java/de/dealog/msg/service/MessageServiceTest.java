@@ -47,15 +47,11 @@ class MessageServiceTest {
         when(query.count()).thenReturn(TOTAL_COUNT);
         when(messageRepository.findAll()).thenReturn(query);
 
-        PagedList<? extends Message> list = messageService.list(PAGE_NUMBER_ONE, PAGE_SIZE_3);
+        PagedList<? extends Message> list = messageService.list(null, PAGE_NUMBER_ONE, PAGE_SIZE_3);
         Assertions.assertEquals(messages.size(), list.getContent().size());
         Assertions.assertEquals(PAGE_NUMBER_ONE, list.getPage());
         Assertions.assertEquals(messages.size(), list.getPageSize());
         Assertions.assertEquals(TOTAL_COUNT, list.getCount());
         Assertions.assertEquals(pageCount, list.getPageCount());
-    }
-
-    @Test
-    void create() {
     }
 }
