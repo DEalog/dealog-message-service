@@ -26,6 +26,7 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
         WktDecoder decoder = Wkt.newDecoder(Wkt.Dialect.POSTGIS_EWKT_1);
         Polygon<?> polygon = (Polygon<?>) decoder.decode(payload.getGeocode(), CoordinateReferenceSystems.WGS84);
         message.setGeocode(polygon);
+        message.setPublishedAt(payload.getPublishedAt());
         return message;
     }
 
@@ -36,6 +37,7 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
         payload.setHeadline(message.getHeadline());
         payload.setDescription(message.getDescription());
         payload.setGeocode(message.getGeocode().toString());
+        payload.setPublishedAt(message.getPublishedAt());
         return payload;
     }
 }

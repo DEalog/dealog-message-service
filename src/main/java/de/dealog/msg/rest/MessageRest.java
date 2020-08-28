@@ -37,5 +37,5 @@ public class MessageRest {
      * The createdDate
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-    private Date createdDate;
+    private Date publishedAt;
 }

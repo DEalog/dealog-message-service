@@ -4,6 +4,8 @@ import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.Message;
 import de.dealog.msg.persistence.MessageRepository;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Parameters;
+import io.quarkus.panache.common.Sort;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +16,8 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -45,7 +49,7 @@ class MessageServiceTest {
         when(query.pageCount()).thenReturn(pageCount);
         when(query.page(1, PAGE_SIZE_3)).thenReturn(queryPage);
         when(query.count()).thenReturn(TOTAL_COUNT);
-        when(messageRepository.findAll()).thenReturn(query);
+        when(messageRepository.find(anyString(), any(Sort.class), any(Parameters.class))).thenReturn(query);
 
         PagedList<? extends Message> list = messageService.list(null, PAGE_NUMBER_ONE, PAGE_SIZE_3);
         Assertions.assertEquals(messages.size(), list.getContent().size());

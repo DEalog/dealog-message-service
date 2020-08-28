@@ -1,6 +1,9 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `NEW` Rest message request is sorted by publishedAt in descending order
+- `NEW` Add publishedAt field to message model
+- `CNG` Renamed message event type: Published -> Created
 - `NEW` Message service queries point within geocode if present
 - `NEW` Add point (lang & lat) query parameters to REST message request 
 - `NEW` Enhance message model with geocode field

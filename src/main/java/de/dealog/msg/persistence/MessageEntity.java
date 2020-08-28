@@ -45,10 +45,11 @@ public class MessageEntity extends PanacheEntity implements Message {
      */
     private Polygon geocode;
 
+    protected Date publishedAt;
 
     @CreationTimestamp
-    protected Date createdDate;
+    protected Date createdAt;
 
     @UpdateTimestamp
-    protected Date lastModifiedDate;
+    protected Date modifiedAt;
 }
