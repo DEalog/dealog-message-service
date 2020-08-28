@@ -15,7 +15,7 @@ public class MessageConverter extends Converter<Message, MessageRest> {
         messageRest.setIdentifier(message.getIdentifier());
         messageRest.setHeadline(message.getHeadline());
         messageRest.setDescription(message.getDescription());
-        messageRest.setCreatedDate(message.getCreatedDate());
+        messageRest.setPublishedAt(message.getPublishedAt());
         return messageRest;
     }
 
@@ -25,6 +25,7 @@ public class MessageConverter extends Converter<Message, MessageRest> {
         message.setIdentifier(messageRest.getIdentifier());
         message.setHeadline(messageRest.getHeadline());
         message.setDescription(messageRest.getDescription());
+        message.setPublishedAt(messageRest.getPublishedAt());
         return message;
     }
 }

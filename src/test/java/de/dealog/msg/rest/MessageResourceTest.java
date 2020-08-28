@@ -52,6 +52,8 @@ class MessageResourceTest {
             .when().get(MessageResource.RESOURCE_PATH)
             .then()
             .statusCode(200)
-            .body(containsString("{\"identifier\":\"" + UUID_ONE + "\",\"headline\":\"This is the headline\",\"description\":\"This is the description\"}"));
+            .body(containsString("\"identifier\":\"" + UUID_ONE + "\""))
+            .body(containsString("\"headline\":\"This is the headline\""))
+            .body(containsString("\"description\":\"This is the description\""));
     }
 }

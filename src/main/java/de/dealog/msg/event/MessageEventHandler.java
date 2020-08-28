@@ -28,7 +28,7 @@ public class MessageEventHandler {
         log.debug("Received message event type '{}'", messageEvent.getType());
         Message message = messageEventPayloadConverter.convert(messageEvent.getPayload());
         switch (messageEvent.getType()) {
-            case Published:
+            case Created:
                 handlePublishEvent(message);
                 break;
             case Imported:

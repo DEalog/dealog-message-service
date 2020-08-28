@@ -14,17 +14,21 @@ public interface Message {
 
     void setGeocode(Polygon geocode);
 
+    void setPublishedAt(Date publishedAd);
+
     String getIdentifier();
 
     String getHeadline();
 
     String getDescription();
 
-    Date getCreatedDate();
-
-    Date getLastModifiedDate();
-
     Polygon getGeocode();
+
+    Date getPublishedAt();
+
+    Date getCreatedAt();
+
+    Date getModifiedAt();
 
     String toString();
 }
