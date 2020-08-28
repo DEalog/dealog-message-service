@@ -28,19 +28,29 @@ public class MessageEventHandler {
         log.debug("Received message event type '{}'", messageEvent.getType());
         Message message = messageEventPayloadConverter.convert(messageEvent.getPayload());
         switch (messageEvent.getType()) {
-            case Created:
-                handlePublishEvent(message);
-                break;
             case Imported:
+            case Created:
+                handleCreateEvent(message);
+                break;
             case Updated:
+                handleUpdateEvent(message);
+                break;
             case Superseded:
+                handleSupersedeEvent(message);
+                break;
             default:
                 log.debug("Handler for message event type  '{}' is not implemented.", messageEvent.getType());
         }
     }
 
-    private void handlePublishEvent(final Message message) {
+    private void handleSupersedeEvent(Message message) { messageService.supersede(message);}
+
+    private void handleCreateEvent(final Message message) {
         messageService.create(message);
+    }
+
+    private void handleUpdateEvent(final Message message) {
+        messageService.update(message);
     }
 
 }

@@ -1,6 +1,9 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `NEW` Implemente update and supersede messages service methods
+- `CNG` Message service returns only messags with message type published
+- `NEW` Add MessageStatus field to message model
 - `NEW` Rest message request is sorted by publishedAt in descending order
 - `NEW` Add publishedAt field to message model
 - `CNG` Renamed message event type: Published -> Created

@@ -45,11 +45,25 @@ public class MessageEntity extends PanacheEntity implements Message {
      */
     private Polygon geocode;
 
+    /**
+     * The status of the message
+     */
+    protected MessageStatus status;
+
+    /***
+     * The date when the message is published
+     */
     protected Date publishedAt;
 
+    /**
+     * Internal creation date
+     */
     @CreationTimestamp
     protected Date createdAt;
 
+    /**
+     * Internal modification date
+     */
     @UpdateTimestamp
     protected Date modifiedAt;
 }
