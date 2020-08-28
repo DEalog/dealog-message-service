@@ -14,6 +14,8 @@ public interface Message {
 
     void setGeocode(Polygon geocode);
 
+    void setStatus(MessageStatus status);
+
     void setPublishedAt(Date publishedAd);
 
     String getIdentifier();
@@ -23,6 +25,8 @@ public interface Message {
     String getDescription();
 
     Polygon getGeocode();
+
+    MessageStatus getStatus();
 
     Date getPublishedAt();
 
