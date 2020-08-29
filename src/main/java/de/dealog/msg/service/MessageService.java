@@ -42,7 +42,7 @@ public class MessageService {
         Parameters parameters = Parameters.with("status", MessageStatus.Published);
         if (point != null) {
             parameters.and("point", point);
-            queryBuilder.append(" within(:point, geocode) = true");
+            queryBuilder.append(" AND within(:point, geocode) = true");
         }
         messageQuery = messageRepository.find(queryBuilder.toString(), sort, parameters);
 

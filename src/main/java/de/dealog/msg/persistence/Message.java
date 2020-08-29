@@ -1,6 +1,7 @@
 package de.dealog.msg.persistence;
 
-import org.geolatte.geom.Polygon;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.MultiPolygon;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public interface Message {
 
     void setDescription(String description);
 
-    void setGeocode(Polygon geocode);
+    void setGeocode(MultiPolygon<G2D> geocode);
 
     void setStatus(MessageStatus status);
 
@@ -24,7 +25,7 @@ public interface Message {
 
     String getDescription();
 
-    Polygon getGeocode();
+    MultiPolygon getGeocode();
 
     MessageStatus getStatus();
 
