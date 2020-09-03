@@ -4,12 +4,15 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.geolatte.geom.Polygon;
+import org.geolatte.geom.G2D;
+import org.geolatte.geom.MultiPolygon;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+
+
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
@@ -43,7 +46,7 @@ public class MessageEntity extends PanacheEntity implements Message {
     /**
      * The geographic code delineating the affected area of the alert message
      */
-    private Polygon geocode;
+    private MultiPolygon<G2D> geocode;
 
     /**
      * The status of the message

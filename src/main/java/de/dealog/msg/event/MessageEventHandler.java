@@ -26,20 +26,24 @@ public class MessageEventHandler {
     @Transactional
     public void process(final MessageEvent messageEvent) {
         log.debug("Received message event type '{}'", messageEvent.getType());
-        Message message = messageEventPayloadConverter.convert(messageEvent.getPayload());
-        switch (messageEvent.getType()) {
-            case Imported:
-            case Created:
-                handleCreateEvent(message);
-                break;
-            case Updated:
-                handleUpdateEvent(message);
-                break;
-            case Superseded:
-                handleSupersedeEvent(message);
-                break;
-            default:
-                log.debug("Handler for message event type  '{}' is not implemented.", messageEvent.getType());
+        try {
+            Message message = messageEventPayloadConverter.convert(messageEvent.getPayload());
+            switch (messageEvent.getType()) {
+                case Imported:
+                case Created:
+                    handleCreateEvent(message);
+                    break;
+                case Updated:
+                    handleUpdateEvent(message);
+                    break;
+                case Superseded:
+                    handleSupersedeEvent(message);
+                    break;
+                default:
+                    log.debug("Handler for message event type  '{}' is not implemented.", messageEvent.getType());
+            }
+        } catch (UnsupportedGeometryException e) {
+            log.error("Process of message with identifier '{}' failed.", messageEvent.getPayload().getIdentifier(), e);
         }
     }
 
