@@ -19,7 +19,7 @@
     <slf4j.version>1.6.1</slf4j.version>
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
     <lombok.version>1.18.2</lombok.version>
-    <dealog-common.version>[1.0.0-SNAPSHOT,1.0.1-SNAPSHOT)</dealog-common.version>
+    <dealog-common.version>1.0.0-SNAPSHOT</dealog-common.version>
     <rest-assured.version>4.3.0</rest-assured.version>
     <hibernate-spatial.version>5.4.15.Final</hibernate-spatial.version>
     <postgis-jdbc.version>2.5.0</postgis-jdbc.version>
@@ -196,6 +196,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
+        <quarkus.native.additional-build-args>-H:ReflectionConfigurationFiles=reflection-config.json</quarkus.native.additional-build-args>
       </properties>
     </profile>
   </profiles>
