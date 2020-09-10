@@ -1,5 +1,14 @@
 [
   {
+    "name": "de.dealog.common.serialization.MessageEventDeserializer",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
+  },
+  {
     "name": "org.geolatte.geom.codec.PostgisWkbDecoder",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
