@@ -7,22 +7,22 @@
   <version>1.0.0-SNAPSHOT</version>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <dealog-common.version>1.0.0-SNAPSHOT</dealog-common.version>
+    <hibernate-spatial.version>5.4.15.Final</hibernate-spatial.version>
+    <lombok.version>1.18.2</lombok.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <postgis-jdbc.version>2.5.0</postgis-jdbc.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus-plugin.version>1.6.1.Final</quarkus-plugin.version>
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>1.6.1.Final</quarkus.platform.version>
+    <rest-assured.version>4.3.0</rest-assured.version>
     <slf4j.version>1.6.1</slf4j.version>
     <surefire-plugin.version>2.22.1</surefire-plugin.version>
-    <lombok.version>1.18.2</lombok.version>
-    <dealog-common.version>1.0.0-SNAPSHOT</dealog-common.version>
-    <rest-assured.version>4.3.0</rest-assured.version>
-    <hibernate-spatial.version>5.4.15.Final</hibernate-spatial.version>
-    <postgis-jdbc.version>2.5.0</postgis-jdbc.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -60,57 +60,42 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-mutiny</artifactId>
     </dependency>
-
-    <!-- Hibernate ORM specific dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-orm-panache</artifactId>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
-
-    <!-- JDBC driver dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-postgresql</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-spatial</artifactId>
       <version>${hibernate-spatial.version}</version>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-flyway</artifactId>
     </dependency>
-
-    <!-- kafka dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
     </dependency>
-
-    <!-- DEalog dependencies -->
     <dependency>
       <groupId>de.dealog</groupId>
       <artifactId>dealog-common</artifactId>
       <version>${dealog-common.version}</version>
     </dependency>
-
-    <!-- 3rd party dependencies -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
       <scope>compile</scope>
     </dependency>
-
-    <!-- Test dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -131,6 +116,10 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-panache-mock</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
   </dependencies>
   <build>
@@ -195,8 +184,8 @@
         </plugins>
       </build>
       <properties>
-        <quarkus.package.type>native</quarkus.package.type>
         <quarkus.native.additional-build-args>-H:ReflectionConfigurationFiles=reflection-config.json</quarkus.native.additional-build-args>
+        <quarkus.package.type>native</quarkus.package.type>
       </properties>
     </profile>
   </profiles>
