@@ -63,7 +63,6 @@ jobs:
         image_tag: ${{ env.VERSION }}
         registry: ${{ steps.login-ecr.outputs.registry }}
         dockerfile: ./src/main/docker/Dockerfile.native
-      run: echo "::set-output name=image::$FULL_IMAGE_NAME:${{ env.VERSION }}"
 
     - name: Download task definition
       run: |
@@ -75,7 +74,7 @@ jobs:
       with:
         task-definition: task-definition.json
         container-name: message-service
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ steps.build-image.outputs.FULL_IMAGE_NAME }}:${{ env.VERSION }}"
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
