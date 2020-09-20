@@ -41,7 +41,7 @@ jobs:
         password: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
         image_name: message-service
         image_tag: 1.0.0-SNAPSHOT-${GITHUB_SHA::8}
-        registry: 861729690598.dkr.ecr.us-west-1.amazonaws.com
+        registry: 020108638075.dkr.ecr.eu-central-1.amazonaws.com
         dockerfile: ./src/main/docker/Dockerfile.native
     - name: Push Docker image to AWS ECS
       uses: jwalton/gh-ecr-push@v1
