@@ -26,4 +26,4 @@ jobs:
         repositories: '[{ "id": "github", "name": "dealog-common", "url": "https://maven.pkg.github.com/dealog/dealog-common" }]'
         servers: '[{"id": "github", "username": "${secrets.SERVER_USERNAME}", "password": "${secrets.SERVER_PASSWORD}"}]'
     - name: Build with Maven
-      run: export && ./mvnw package --file pom.xml --batch-mode --settings settings.xml -Pnative -Dquarkus.native.container-build=true -DprojectVersion=1.0.0-SNAPSHOT-${GITHUB_SHA::8}
+      run: export && ./mvnw package --file pom.xml --batch-mode --settings ${HOME}/.m2/settings.xml -Pnative -Dquarkus.native.container-build=true -DprojectVersion=1.0.0-SNAPSHOT-${GITHUB_SHA::8}
