@@ -42,7 +42,7 @@ jobs:
       run: |
         ./mvnw versions:set -DnewVersion=${{ env.VERSION }}
         ./mvnw package --file pom.xml --batch-mode --settings ~/.m2/settings.xml -Pnative -Dquarkus.native.container-build=true
-    - name: Build Docker image
+    - name: Build and push Docker image
       uses: whoan/docker-build-with-cache-action@v5
       with:
         username: "${{ secrets.AWS_ACCESS_KEY_ID }}"
@@ -51,10 +51,3 @@ jobs:
         image_tag: ${{ env.VERSION }}
         registry: ${{ env.REGISTRY }}
         dockerfile: ./src/main/docker/Dockerfile.native
-    - name: Push Docker image to AWS ECS
-      uses: jwalton/gh-ecr-push@v1
-      with:
-        access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        region: ${{ env.AWS_REGION }}
-        image: ${{ env.FULL_IMAGE_NAME }}:${{ env.VERSION }}
