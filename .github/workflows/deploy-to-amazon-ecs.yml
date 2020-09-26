@@ -3,7 +3,7 @@ name: Deploy to Amazon ECS
 on:
   workflow_run:
     workflows: [ "Build Maven project, dockerize & publish" ]
-    branches: [ $default-branch ]
+    branches: [ "feature/DEV-99-Deployment-on-AWS" ]
     types:
       - completed
 
