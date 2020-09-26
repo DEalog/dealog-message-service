@@ -16,7 +16,7 @@ jobs:
 
     - name: Set version number
       id: version
-      uses: action/version-action@main
+      uses: DEalog/version-action@main
       with:
         fallback-prefix: "1.0.0-SNAPSHOT-"
 
