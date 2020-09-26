@@ -6,6 +6,8 @@ on:
     branches: [ $default-branch ]
     types:
       - completed
+      - requested
+  #workflow_dispatch: # trigger manually
 
 jobs:
   deploy:
