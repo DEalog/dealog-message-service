@@ -84,6 +84,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build and push Docker image
+      id: docker-build
       uses: whoan/docker-build-with-cache-action@v5
       with:
         username: "${{ secrets.AWS_ACCESS_KEY_ID }}"
@@ -92,3 +93,14 @@ jobs:
         image_tag: ${{ env.VERSION }}
         registry: ${{ steps.login-ecr.outputs.registry }}
         dockerfile: ./src/main/docker/Dockerfile.native
+    
+    - name: Store docker image name
+      run: echo ${{ steps.docker-build.outputs.FULL_IMAGE_NAME }} >> ./full_image_name.txt
+      shell: bash
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: dockerized-message-service
+        path: |
+          ./full_image_name.txt
