@@ -43,9 +43,7 @@ jobs:
     - name: Build with Maven
       id: build
       run: |
-        ls -lisa
-        cat ./version.txt
-        ./mvnw versions:set -DnewVersion=${{ env.VERSION }}
+        ./mvnw versions:set -DnewVersion=${{ steps.version.outputs.version_number }}
         ./mvnw package --file pom.xml --batch-mode --settings ~/.m2/settings.xml -Pnative
     
     - name: Create artifact
@@ -73,8 +71,6 @@ jobs:
         echo ::set-env name=VERSION::$(cat ./version.txt)
         echo ::set-env name=IMAGE_REPO::message-service
         echo ::set-env name=AWS_REGION::eu-central-1
-        echo ${{ env.VERSION }}
-        ls -lisa ./
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
