@@ -17,7 +17,7 @@ jobs:
     - name: Set env
       run: |
         echo ::set-env name=VERSION::$(git describe --exact-match --tags 2> /dev/null || echo "1.0.0-SNAPSHOT-$(git rev-parse --short=8 HEAD)")
-        echo $VERSION >> version.txt
+        echo ${{ env.VERSION }} >> version.txt
         cat version.txt
 
     - name: Cache local Maven repository
@@ -71,7 +71,7 @@ jobs:
         echo ::set-env name=VERSION::$(cat ./version.txt)
         echo ::set-env name=IMAGE_REPO::message-service
         echo ::set-env name=AWS_REGION::eu-central-1
-        echo $VERSION
+        echo ${{ env.VERSION }}
         ls -lisa ./
 
     - name: Configure AWS credentials
