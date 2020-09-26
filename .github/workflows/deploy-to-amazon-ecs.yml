@@ -6,9 +6,10 @@ on:
     branches: [ "feature/DEV-99-Deployment-on-AWS" ]
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
