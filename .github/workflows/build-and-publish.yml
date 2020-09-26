@@ -17,8 +17,6 @@ jobs:
     - name: Set env
       run: |
         echo ::set-env name=VERSION::$(git describe --exact-match --tags 2> /dev/null || echo "1.0.0-SNAPSHOT-$(git rev-parse --short=8 HEAD)")
-        echo ${{ env.VERSION }} >> version.txt
-        cat version.txt
 
     - name: Cache local Maven repository
       uses: actions/cache@v2
@@ -45,6 +43,7 @@ jobs:
       run: |
         ./mvnw versions:set -DnewVersion=${{ env.VERSION }}
         ./mvnw package --file pom.xml --batch-mode --settings ~/.m2/settings.xml -Pnative
+        echo ${{ env.VERSION }} >> version.txt && cat version.txt
     
     - name: Create artifact
       uses: actions/upload-artifact@v2
