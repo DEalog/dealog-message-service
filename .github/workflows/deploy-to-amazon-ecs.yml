@@ -45,7 +45,8 @@ jobs:
       run: |
         aws ecs describe-task-definition --task-definition ${{ env.SERVICE_NAME }} --query taskDefinition > task-definition.json
         echo "::set-output name=service_name::${{ env.SERVICE_NAME }}"
-        echo "::set-output name=task_definition::task-definition.json"
+        echo "::set-output name=task_definition::./task-definition.json"
+        ls -lisa
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-definition-update
