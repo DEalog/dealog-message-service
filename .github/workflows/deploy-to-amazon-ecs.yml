@@ -21,7 +21,7 @@ jobs:
 
     - name: Set env
       run: |
-        echo ls -lisa
+        ls -lisa
         echo ::set-env name=AWS_REGION::eu-central-1
         echo ::set-env name=CLUSTER_NAME::dealog-dev
         echo ::set-env name=SERVICE_NAME::message-service
