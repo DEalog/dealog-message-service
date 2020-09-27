@@ -17,7 +17,7 @@ jobs:
     - name: Download build artifacts
       uses: dawidd6/action-download-artifact@v2
       with:
-        workflow: github.event.workflow_run.workflow_id
+        workflow: ${{ github.event.workflow_run.workflow_id }}
 
     - name: Set env
       run: |
