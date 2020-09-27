@@ -3,7 +3,7 @@ name: Deploy
 on:
   workflow_run:
     workflows: [ "Build" ]
-    branches: [ $default-branch ]
+    #branches: [ $default-branch ]
     types:
       - completed
   #workflow_dispatch: # trigger manually
