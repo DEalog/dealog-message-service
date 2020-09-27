@@ -2,11 +2,12 @@ name: Build
 
 on:
   push:
-    #branches: [ $default-branch ]
-    branches: [ develop ]
+    branches:
+      - main
+      - develop
   pull_request:
-    #branches: [ $default-branch ]
-    branches: [ develop ]
+    branches:
+      - develop
 
 jobs:
   build:
