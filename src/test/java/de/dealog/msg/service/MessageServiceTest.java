@@ -78,13 +78,13 @@ class MessageServiceTest {
     }
 
     @Test
-    void supersede() {
+    void updateStatus() {
         MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description");
         persisted.setStatus(MessageStatus.Published);
         when(messageRepository.findByIdentifier("1")).thenReturn(persisted);
 
         Message superseded = TestUtils.buildMessage("1", "This is the headline", "This is the description");
-        messageService.supersede(superseded);
+        messageService.updateStatus(superseded.getIdentifier(), MessageStatus.Superseded);
 
         ArgumentCaptor<MessageEntity> messageCaptor = ArgumentCaptor.forClass(MessageEntity.class);
         Mockito.verify(messageRepository, Mockito.times(1)).persistAndFlush(messageCaptor.capture());

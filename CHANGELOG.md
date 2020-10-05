@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `NEW` Add message event type "Disposed" and handler
 - `CNG` Geocode field as Multipolygon
 - `NEW` Implemente update and supersede messages service methods
 - `CNG` Message service returns only messags with message type published

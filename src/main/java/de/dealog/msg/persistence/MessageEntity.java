@@ -46,6 +46,7 @@ public class MessageEntity extends PanacheEntity implements Message {
     /**
      * The geographic code delineating the affected area of the alert message
      */
+    @ToString.Exclude
     private MultiPolygon<G2D> geocode;
 
     /**
