@@ -13,5 +13,10 @@ public enum MessageStatus {
     /**
      * The message is superseded
      */
-    Superseded;
+    Superseded,
+
+    /**
+     * The message is disposed
+     */
+    Disposed;
 }

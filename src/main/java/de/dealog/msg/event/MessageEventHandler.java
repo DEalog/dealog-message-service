@@ -2,9 +2,11 @@ package de.dealog.msg.event;
 
 import de.dealog.common.model.MessageEvent;
 import de.dealog.msg.persistence.Message;
+import de.dealog.msg.persistence.MessageStatus;
 import de.dealog.msg.service.MessageService;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -26,8 +28,15 @@ public class MessageEventHandler {
     @Transactional
     public void process(final MessageEvent messageEvent) {
         log.debug("Received message event type '{}'", messageEvent.getType());
+
+        Message message = null;
         try {
-            Message message = messageEventPayloadConverter.convert(messageEvent.getPayload());
+            message = messageEventPayloadConverter.convert(messageEvent.getPayload());
+        } catch (UnsupportedGeometryException e) {
+            log.error("Process of message with identifier '{}' failed.", messageEvent.getPayload().getIdentifier(), e);
+        }
+
+        if (message != null) {
             switch (messageEvent.getType()) {
                 case Imported:
                 case Created:
@@ -37,17 +46,16 @@ public class MessageEventHandler {
                     handleUpdateEvent(message);
                     break;
                 case Superseded:
-                    handleSupersedeEvent(message);
+                    handleStatusUpdateEvent(message.getIdentifier(), MessageStatus.Superseded);
+                    break;
+                case Disposed:
+                    handleStatusUpdateEvent(message.getIdentifier(), MessageStatus.Disposed);
                     break;
                 default:
                     log.debug("Handler for message event type  '{}' is not implemented.", messageEvent.getType());
             }
-        } catch (UnsupportedGeometryException e) {
-            log.error("Process of message with identifier '{}' failed.", messageEvent.getPayload().getIdentifier(), e);
         }
     }
-
-    private void handleSupersedeEvent(Message message) { messageService.supersede(message);}
 
     private void handleCreateEvent(final Message message) {
         messageService.create(message);
@@ -57,4 +65,8 @@ public class MessageEventHandler {
         messageService.update(message);
     }
 
+    private void handleStatusUpdateEvent(final String identifier, final MessageStatus status) {
+        Validate.notEmpty(identifier, "The message identifier should not be null");
+        messageService.updateStatus(identifier, status);
+    }
 }

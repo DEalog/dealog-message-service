@@ -9,6 +9,7 @@ import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Validate;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 
@@ -16,9 +17,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- *
- */
 @ApplicationScoped
 @NoArgsConstructor
 @Slf4j
@@ -27,12 +25,6 @@ public class MessageService {
     @Inject
     MessageRepository messageRepository;
 
-    /**
-     * Return a list of {@link Message}s
-     * @param page
-     * @param size
-     * @return
-     */
     public PagedList<? extends Message> list(final Point<G2D> point, final int page, final int size) {
         log.debug("List messages for page {}, size {} and point '{}' ...", page, size, point);
         PanacheQuery<MessageEntity> messageQuery;
@@ -61,11 +53,10 @@ public class MessageService {
                 .build();
     }
 
-    /**
-     * Create a new ...
-     * @param message {@link MessageEntity}
-     */
     public void create(final Message message) {
+        Validate.notNull(message, "The message should not be null");
+        Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
+
         log.debug("Create message {}" , message);
         if (messageRepository.findByIdentifier(message.getIdentifier()) == null) {
             message.setStatus(MessageStatus.Published);
@@ -75,13 +66,11 @@ public class MessageService {
         }
     }
 
-    /**
-     * Message is updated
-     * @param message The message
-     */
     public void update(final Message message) {
-        log.debug("Update message {}" , message);
+        Validate.notNull(message, "The message should not be null");
+        Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
 
+        log.debug("Update message {}" , message);
         MessageEntity byIdentifier = messageRepository.findByIdentifier(message.getIdentifier());
         if (byIdentifier != null) {
             byIdentifier.setHeadline(message.getHeadline());
@@ -93,18 +82,18 @@ public class MessageService {
         }
     }
 
-    /**
-     * Message is superseded so update state to {@link MessageStatus#Superseded}
-     * @param message The message
-     */
-    public void supersede(final Message message) {
-        log.debug("Supersede message {}" , message);
-        MessageEntity byIdentifier = messageRepository.findByIdentifier(message.getIdentifier());
+    public void updateStatus(final String identifier, final MessageStatus status) {
+        Validate.notEmpty(identifier, "The message identifier should not be empty");
+        Validate.notNull(status, "The message status should not be null");
+
+        log.debug("Update status {} by identifier {}" , status, identifier);
+        MessageEntity byIdentifier = messageRepository.findByIdentifier(identifier);
         if (byIdentifier != null) {
-            byIdentifier.setStatus(MessageStatus.Superseded);
+            byIdentifier.setStatus(status);
             messageRepository.persistAndFlush(byIdentifier);
+
         }else {
-            log.error("Message for identifier {} not found", message.getIdentifier());
+            log.error("Message for identifier {} not found.", identifier);
         }
     }
 }
