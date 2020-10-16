@@ -1,7 +1,12 @@
 package de.dealog.msg.service;
 
 import de.dealog.msg.TestUtils;
-import de.dealog.msg.persistence.*;
+import de.dealog.msg.persistence.model.Message;
+import de.dealog.msg.persistence.model.MessageEntity;
+import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.msg.persistence.repository.GeocodeRepository;
+import de.dealog.msg.persistence.repository.MessageRepository;
+import de.dealog.msg.rest.model.PagedList;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;

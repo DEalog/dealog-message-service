@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class TimezoneSettings {
-    public void setTimezone(@Observes StartupEvent startupEvent) {
+    public void setTimezone(@Observes final StartupEvent startupEvent) {
         System.setProperty("user.timezone", "UTC");
     }
 }

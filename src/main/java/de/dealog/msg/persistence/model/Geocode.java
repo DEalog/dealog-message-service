@@ -1,4 +1,4 @@
-package de.dealog.msg.persistence;
+package de.dealog.msg.persistence.model;
 
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.MultiPolygon;

@@ -1,4 +1,4 @@
-package de.dealog.msg.persistence;
+package de.dealog.msg.persistence.model;
 
 /**
  * The status of the message

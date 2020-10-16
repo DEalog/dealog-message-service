@@ -1,6 +1,12 @@
 package de.dealog.msg.service;
 
-import de.dealog.msg.persistence.*;
+import de.dealog.msg.persistence.model.GeocodeEntity;
+import de.dealog.msg.persistence.model.Message;
+import de.dealog.msg.persistence.model.MessageEntity;
+import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.msg.persistence.repository.GeocodeRepository;
+import de.dealog.msg.persistence.repository.MessageRepository;
+import de.dealog.msg.rest.model.PagedList;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
@@ -31,29 +37,25 @@ public class MessageService {
 
     public PagedList<? extends Message> list(final Point<G2D> point, final int page, final int size) {
         log.debug("List messages for page {}, size {} and point '{}' ...", page, size, point);
-        PanacheQuery<MessageEntity> messageQuery;
-
-        Sort sort = Sort.descending("publishedAt");
-        StringBuilder queryBuilder = new StringBuilder("status = :status");
-        Parameters parameters = Parameters.with("status", MessageStatus.Published);
+        final PanacheQuery<MessageEntity> messageQuery;
+        final StringBuilder queryBuilder = new StringBuilder("status = :status");
+        final Parameters parameters = Parameters.with("status", MessageStatus.Published);
         if (point != null) {
             parameters.and(POINT, point);
             queryBuilder.append(" AND within(:point, geocode.polygons) = true");
         }
-        messageQuery = messageRepository.find(queryBuilder.toString(), sort, parameters);
+        messageQuery = messageRepository.find(queryBuilder.toString(), Sort.descending("publishedAt"), parameters);
 
-        List<MessageEntity> list = messageQuery.page(page, size).list();
-        long count = messageQuery.count();
-        int pageCount = messageQuery.pageCount();
+        final List<MessageEntity> list = messageQuery.page(page, size).list();
 
-        log.debug("... return {} / {} messages ", list.size(), count);
+        log.debug("... return {} / {} messages ", list.size(), messageQuery.count());
 
         return PagedList.<Message>builder()
                 .page(page)
                 .pageSize(size)
                 .content(list)
-                .count(count)
-                .pageCount(pageCount)
+                .count(messageQuery.count())
+                .pageCount(messageQuery.pageCount())
                 .build();
     }
 
@@ -64,8 +66,8 @@ public class MessageService {
 
         log.debug("Create message {}" , message);
         if (messageRepository.findByIdentifier(message.getIdentifier()) == null) {
-            MessageEntity messageEntity = (MessageEntity) message;
-            GeocodeEntity geocodeEntity =
+            final MessageEntity messageEntity = (MessageEntity) message;
+            final GeocodeEntity geocodeEntity =
                     Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
                     .orElse((GeocodeEntity) message.getGeocode());
             messageEntity.setGeocode(geocodeEntity);
@@ -87,12 +89,12 @@ public class MessageService {
         Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
 
         log.debug("Update message {}" , message);
-        MessageEntity byIdentifier = messageRepository.findByIdentifier(message.getIdentifier());
+        final MessageEntity byIdentifier = messageRepository.findByIdentifier(message.getIdentifier());
         if (byIdentifier != null) {
             byIdentifier.setHeadline(message.getHeadline());
             byIdentifier.setDescription(message.getDescription());
 
-            GeocodeEntity geocodeEntity =
+            final GeocodeEntity geocodeEntity =
                     Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
                     .orElse((GeocodeEntity) message.getGeocode());
             byIdentifier.setGeocode(geocodeEntity);
@@ -108,7 +110,7 @@ public class MessageService {
         Validate.notNull(status, "The message status should not be null");
 
         log.debug("Update status {} by identifier {}" , status, identifier);
-        MessageEntity byIdentifier = messageRepository.findByIdentifier(identifier);
+        final MessageEntity byIdentifier = messageRepository.findByIdentifier(identifier);
         if (byIdentifier != null) {
             byIdentifier.setStatus(status);
             messageRepository.persistAndFlush(byIdentifier);

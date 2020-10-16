@@ -1,8 +1,8 @@
 package de.dealog.msg;
 
-import de.dealog.msg.persistence.GeocodeEntity;
-import de.dealog.msg.persistence.MessageEntity;
-import de.dealog.msg.rest.MessageRest;
+import de.dealog.msg.persistence.model.GeocodeEntity;
+import de.dealog.msg.persistence.model.MessageEntity;
+import de.dealog.msg.rest.model.MessageRest;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.MultiPolygon;

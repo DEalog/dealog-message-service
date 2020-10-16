@@ -1,8 +1,8 @@
 package de.dealog.msg.event;
 
 import de.dealog.common.model.MessageEvent;
-import de.dealog.msg.persistence.Message;
-import de.dealog.msg.persistence.MessageStatus;
+import de.dealog.msg.persistence.model.Message;
+import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.service.MessageService;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class MessageEventHandler {
         Message message = null;
         try {
             message = messageEventPayloadConverter.convert(messageEvent.getPayload());
-        } catch (UnsupportedGeometryException e) {
+        } catch (final UnsupportedGeometryException e) {
             log.error("Process of message with identifier '{}' failed.", messageEvent.getPayload().getIdentifier(), e);
         }
 

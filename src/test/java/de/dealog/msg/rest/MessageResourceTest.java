@@ -1,9 +1,10 @@
 package de.dealog.msg.rest;
 
 import de.dealog.msg.TestUtils;
-import de.dealog.msg.persistence.Message;
+import de.dealog.msg.persistence.model.Message;
+import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.service.MessageService;
-import de.dealog.msg.service.PagedList;
+import de.dealog.msg.rest.model.PagedList;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,8 +1,11 @@
 package de.dealog.msg.rest;
 
-import de.dealog.msg.persistence.Message;
+import de.dealog.msg.persistence.model.Message;
+import de.dealog.msg.rest.model.GeoRequest;
+import de.dealog.msg.rest.model.MessageRest;
+import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.service.MessageService;
-import de.dealog.msg.service.PagedList;
+import de.dealog.msg.rest.model.PagedList;
 
 import javax.inject.Inject;
 import javax.ws.rs.BeanParam;
@@ -37,7 +40,7 @@ public class MessageResource {
 
         final PagedList<? extends Message> messages = messageService.list(
                 geoRequest.getPoint(), pageRequest.getPage(), pageRequest.getSize());
-        Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
+        final Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
 
         return Response.ok(messagesRest).build();
     }

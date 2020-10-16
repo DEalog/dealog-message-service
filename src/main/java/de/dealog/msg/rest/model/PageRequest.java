@@ -1,4 +1,4 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +15,12 @@ public class PageRequest {
     /**
      *  The name of the HTTP page query parameter
      */
-    static final String PAGE = "page";
+    public static final String PAGE = "page";
 
     /**
      *  The name of the HTTP size query parameter
      */
-    static final String SIZE = "size";
+    public static final String SIZE = "size";
 
     @QueryParam(PAGE)
     @DefaultValue("0")

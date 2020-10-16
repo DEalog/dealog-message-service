@@ -1,4 +1,4 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class GeoRequest {
     @QueryParam("lat")
     private Double latitude;
 
-    Point<G2D> getPoint() {
+    public Point<G2D> getPoint() {
         Point<G2D>  point = null;
         if (longitude != null && latitude != null) {
            point = Geometries.mkPoint(new G2D(longitude, latitude), CoordinateReferenceSystems.WGS84);

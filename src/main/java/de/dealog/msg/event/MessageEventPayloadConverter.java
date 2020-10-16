@@ -2,8 +2,8 @@ package de.dealog.msg.event;
 
 import com.google.common.base.Converter;
 import de.dealog.common.model.MessageEventPayload;
-import de.dealog.msg.persistence.GeocodeEntity;
-import de.dealog.msg.persistence.MessageEntity;
+import de.dealog.msg.persistence.model.GeocodeEntity;
+import de.dealog.msg.persistence.model.MessageEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.geolatte.geom.G2D;
@@ -27,7 +27,7 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
 
     @Override
     protected MessageEntity doForward(final MessageEventPayload payload) {
-        MessageEntity message= new MessageEntity();
+        final MessageEntity message= new MessageEntity();
         message.setIdentifier(payload.getIdentifier());
         message.setHeadline(payload.getHeadline());
         message.setDescription(payload.getDescription());
@@ -37,9 +37,9 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
     }
 
     private GeocodeEntity convert(final String geocode) {
-        MultiPolygon<G2D> multiPolygon;
-        WktDecoder decoder = Wkt.newDecoder(Wkt.Dialect.POSTGIS_EWKT_1);
-        Geometry<G2D> decode = decoder.decode(geocode, CoordinateReferenceSystems.WGS84);
+        final MultiPolygon<G2D> multiPolygon;
+        final WktDecoder decoder = Wkt.newDecoder(Wkt.Dialect.POSTGIS_EWKT_1);
+        final Geometry<G2D> decode = decoder.decode(geocode, CoordinateReferenceSystems.WGS84);
         switch (decode.getGeometryType()) {
             case POLYGON:
                 multiPolygon = DSL.multipolygon((Polygon<G2D>) decode);
@@ -59,7 +59,7 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
 
     @Override
     protected MessageEventPayload doBackward(final MessageEntity message) {
-        MessageEventPayload payload= new MessageEventPayload();
+        final MessageEventPayload payload= new MessageEventPayload();
         payload.setIdentifier(message.getIdentifier());
         payload.setHeadline(message.getHeadline());
         payload.setDescription(message.getDescription());

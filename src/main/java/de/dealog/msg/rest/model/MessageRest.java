@@ -1,8 +1,8 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.dealog.msg.persistence.Message;
+import de.dealog.msg.persistence.model.Message;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
