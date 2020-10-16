@@ -7,11 +7,11 @@ import de.dealog.msg.service.MessageService;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 @ApplicationScoped
 @Slf4j
@@ -25,7 +25,7 @@ public class MessageEventHandler {
 
     @Incoming("messages")
     @Blocking
-    @Transactional
+    @Acknowledgment(Acknowledgment.Strategy.NONE)
     public void process(final MessageEvent messageEvent) {
         log.debug("Received message event type '{}'", messageEvent.getType());
 

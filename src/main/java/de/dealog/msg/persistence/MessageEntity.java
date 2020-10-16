@@ -4,16 +4,12 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.geolatte.geom.G2D;
-import org.geolatte.geom.MultiPolygon;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-
-
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -22,52 +18,38 @@ import java.util.Date;
 @ToString
 public class MessageEntity extends PanacheEntity implements Message {
 
-    /**
-     * The identifier of the message
-     */
     @NotEmpty
     @Column(unique=true)
     private String identifier;
 
-    /**
-     * The headline of the message
-     */
     @NotEmpty
     @Column(columnDefinition="TEXT")
     private String headline;
 
-    /**
-     * The description of the message
-     */
     @NotEmpty
     @Column(columnDefinition="TEXT")
     private String description;
 
-    /**
-     * The geographic code delineating the affected area of the alert message
-     */
     @ToString.Exclude
-    private MultiPolygon<G2D> geocode;
+    @NotNull
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "geocode_id")
+    private GeocodeEntity geocode;
 
-    /**
-     * The status of the message
-     */
-    protected MessageStatus status;
+    @Enumerated(EnumType.STRING)
+    private MessageStatus status;
 
-    /***
-     * The date when the message is published
-     */
-    protected Date publishedAt;
+    private Date publishedAt;
 
     /**
      * Internal creation date
      */
     @CreationTimestamp
-    protected Date createdAt;
+    private Date createdAt;
 
     /**
      * Internal modification date
      */
     @UpdateTimestamp
-    protected Date modifiedAt;
+    private Date modifiedAt;
 }

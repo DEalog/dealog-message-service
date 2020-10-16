@@ -21,7 +21,7 @@ public class MessageConverter extends Converter<Message, MessageRest> {
 
     @Override
     protected Message doBackward(final MessageRest messageRest) {
-        Message message= new MessageEntity();
+        MessageEntity message= new MessageEntity();
         message.setIdentifier(messageRest.getIdentifier());
         message.setHeadline(messageRest.getHeadline());
         message.setDescription(messageRest.getDescription());

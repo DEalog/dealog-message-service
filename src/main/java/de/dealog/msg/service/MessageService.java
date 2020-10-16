@@ -1,9 +1,6 @@
 package de.dealog.msg.service;
 
-import de.dealog.msg.persistence.Message;
-import de.dealog.msg.persistence.MessageEntity;
-import de.dealog.msg.persistence.MessageRepository;
-import de.dealog.msg.persistence.MessageStatus;
+import de.dealog.msg.persistence.*;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
@@ -15,15 +12,22 @@ import org.geolatte.geom.Point;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 @NoArgsConstructor
 @Slf4j
 public class MessageService {
 
+    public static final String POINT = "point";
+
     @Inject
     MessageRepository messageRepository;
+
+    @Inject
+    GeocodeRepository geocodeRepository;
 
     public PagedList<? extends Message> list(final Point<G2D> point, final int page, final int size) {
         log.debug("List messages for page {}, size {} and point '{}' ...", page, size, point);
@@ -33,8 +37,8 @@ public class MessageService {
         StringBuilder queryBuilder = new StringBuilder("status = :status");
         Parameters parameters = Parameters.with("status", MessageStatus.Published);
         if (point != null) {
-            parameters.and("point", point);
-            queryBuilder.append(" AND within(:point, geocode) = true");
+            parameters.and(POINT, point);
+            queryBuilder.append(" AND within(:point, geocode.polygons) = true");
         }
         messageQuery = messageRepository.find(queryBuilder.toString(), sort, parameters);
 
@@ -53,19 +57,31 @@ public class MessageService {
                 .build();
     }
 
+    @Transactional
     public void create(final Message message) {
         Validate.notNull(message, "The message should not be null");
         Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
 
         log.debug("Create message {}" , message);
         if (messageRepository.findByIdentifier(message.getIdentifier()) == null) {
-            message.setStatus(MessageStatus.Published);
-            messageRepository.persistAndFlush((MessageEntity) message);
+            MessageEntity messageEntity = (MessageEntity) message;
+            GeocodeEntity geocodeEntity =
+                    Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
+                    .orElse((GeocodeEntity) message.getGeocode());
+            messageEntity.setGeocode(geocodeEntity);
+            messageEntity.setStatus(MessageStatus.Published);
+            try {
+                messageRepository.persistAndFlush(messageEntity);
+            } catch (final Exception e) {
+                log.error("Create message {} failed!", message.getIdentifier(), e);
+            }
+
         } else {
             log.error("Found duplicate identifier {}", message.getIdentifier());
         }
     }
 
+    @Transactional
     public void update(final Message message) {
         Validate.notNull(message, "The message should not be null");
         Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
@@ -75,13 +91,18 @@ public class MessageService {
         if (byIdentifier != null) {
             byIdentifier.setHeadline(message.getHeadline());
             byIdentifier.setDescription(message.getDescription());
-            byIdentifier.setGeocode(message.getGeocode());
+
+            GeocodeEntity geocodeEntity =
+                    Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
+                    .orElse((GeocodeEntity) message.getGeocode());
+            byIdentifier.setGeocode(geocodeEntity);
             messageRepository.persistAndFlush(byIdentifier);
         } else {
             log.error("Message for identifier {} not found", message.getIdentifier());
         }
     }
 
+    @Transactional
     public void updateStatus(final String identifier, final MessageStatus status) {
         Validate.notEmpty(identifier, "The message identifier should not be empty");
         Validate.notNull(status, "The message status should not be null");
