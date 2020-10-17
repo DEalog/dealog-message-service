@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 @Produces("application/de.dealog.service.message-" + MessageResource.API_VERSION)
 public class MessageResource {
 
-    public static final String RESOURCE_PATH = "/api/message";
+    public static final String RESOURCE_PATH = "/api/messages";
     public static final String API_VERSION = "v1.0+json";
 
     @Inject
@@ -36,7 +36,7 @@ public class MessageResource {
      * @return the list
      */
     @GET
-    public Response getAll(@BeanParam final GeoRequest geoRequest, @BeanParam final PageRequest pageRequest) {
+    public Response findAll(@BeanParam final GeoRequest geoRequest, @BeanParam final PageRequest pageRequest) {
 
         final PagedList<? extends Message> messages = messageService.list(
                 geoRequest.getPoint(), pageRequest.getPage(), pageRequest.getSize());

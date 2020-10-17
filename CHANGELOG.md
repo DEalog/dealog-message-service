@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `CNG` Resource path 'api/message' is now 'api/messages'
 - `NEW` Add geocode md5 hash to improve find 
 - `NEW` Change Geocode to entity
 - `NEW` Add message event type "Disposed" and handler
