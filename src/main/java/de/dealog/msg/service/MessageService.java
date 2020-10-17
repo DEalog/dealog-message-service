@@ -35,7 +35,13 @@ public class MessageService {
     @Inject
     GeocodeRepository geocodeRepository;
 
-    public PagedList<? extends Message> list(final Point<G2D> point, final int page, final int size) {
+    public Optional<Message> find(final String identifier, final MessageStatus status) {
+        log.debug("Find message by identifier {} in status {}", identifier, status);
+        final MessageEntity byIdentifier = messageRepository.findByIdentifierAndStatus(identifier, status);
+        return Optional.ofNullable(byIdentifier);
+    }
+
+    public PagedList<? extends Message> find(final Point<G2D> point, final int page, final int size) {
         log.debug("List messages for page {}, size {} and point '{}' ...", page, size, point);
         final PanacheQuery<MessageEntity> messageQuery;
         final StringBuilder queryBuilder = new StringBuilder("status = :status");
