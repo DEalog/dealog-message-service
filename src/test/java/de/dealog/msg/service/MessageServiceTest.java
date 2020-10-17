@@ -24,8 +24,10 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -48,7 +50,23 @@ class MessageServiceTest {
     GeocodeRepository geocodeRepository;
 
     @Test
-    void listMessagesByPoint() {
+    void findOneMessage() {
+        final MessageEntity persisted = new MessageEntity();
+        final String identifier = "eac3c557-eb9c-472c-8593-cc49098867f1";
+        persisted.setIdentifier(identifier);
+        when(messageRepository.findByIdentifierAndStatus(identifier, MessageStatus.Published)).thenReturn(persisted);
+
+        final Optional<Message> message = messageService.find(identifier, MessageStatus.Published);
+        assertThat(message.isPresent(), notNullValue());
+        assertThat(message.get().getIdentifier(), is(identifier));
+
+        when(messageRepository.findByIdentifier("667")).thenReturn(null);
+        final Optional<Message> doesNotExist = messageService.find("667", MessageStatus.Published);
+        assertThat(doesNotExist.isPresent(), is(false));
+    }
+
+    @Test
+    void findMessagesByPoint() {
         PanacheQuery query = Mockito.mock(PanacheQuery.class);
         PanacheQuery queryPage = Mockito.mock(PanacheQuery.class);
         when(queryPage.list()).thenReturn(Collections.emptyList());
@@ -59,7 +77,7 @@ class MessageServiceTest {
         when(messageRepository.find(anyString(), any(Sort.class), any(Parameters.class))).thenReturn(query);
 
         Point<G2D> g2DPoint = Geometries.mkPoint(new G2D(8, 9), CoordinateReferenceSystems.WGS84);
-        messageService.list(g2DPoint, 0, 1);
+        messageService.find(g2DPoint, 0, 1);
 
         ArgumentCaptor<Parameters> parameterCaptor = ArgumentCaptor.forClass(Parameters.class);
         Mockito.verify(messageRepository, Mockito.times(1)).find(any(String.class), any(Sort.class), parameterCaptor.capture());
@@ -68,7 +86,7 @@ class MessageServiceTest {
     }
 
     @Test
-    void listAllMessages() {
+    void findMessages() {
         Message msg_one = TestUtils.buildMessage("1", "This is the headline", "This is the description");
         Message msg_two = TestUtils.buildMessage("2", "This is the second headline", "This is the second description");
         Message msg_three = TestUtils.buildMessage("3", "This is the third headline", "This is the third description");
@@ -84,7 +102,7 @@ class MessageServiceTest {
         when(query.count()).thenReturn(TOTAL_COUNT);
         when(messageRepository.find(anyString(), any(Sort.class), any(Parameters.class))).thenReturn(query);
 
-        PagedList<? extends Message> list = messageService.list(null, PAGE_NUMBER_ONE, PAGE_SIZE_3);
+        PagedList<? extends Message> list = messageService.find(null, PAGE_NUMBER_ONE, PAGE_SIZE_3);
 
         assertThat(PAGE_NUMBER_ONE, is(list.getPage()));
         assertThat(messages.size(), is(list.getPageSize()));

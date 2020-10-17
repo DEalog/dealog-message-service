@@ -2,11 +2,11 @@ package de.dealog.msg.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,6 +21,7 @@ import java.util.Optional;
 @Slf4j
 public class ApiResource {
     public static final String RESOURCE_PATH = "/api/unsupported";
+    public static final String QUERY_PARAM_VERSION = "version";
 
     @ConfigProperty(name = "dealog.api.version.unsupported")
     Optional<List<String>> mayBeVersions;
@@ -32,7 +33,7 @@ public class ApiResource {
 *              else it return {@link javax.ws.rs.core.Response.Status#NO_CONTENT}
      */
     @GET
-    public Response unsupported(@NotEmpty @QueryParam final String version) {
+    public Response unsupported(@NotEmpty @QueryParam(QUERY_PARAM_VERSION) final String version) {
 
         Response response = Response.status(Response.Status.NOT_FOUND).build();
 

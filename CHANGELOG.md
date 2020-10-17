@@ -1,6 +1,8 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- 'CNG' Change to Java 11
+- `NEW` Add Message resource to find a message by its identifier 
 - `CNG` Resource path 'api/message' is now 'api/messages'
 - `NEW` Add geocode md5 hash to improve find 
 - `NEW` Change Geocode to entity

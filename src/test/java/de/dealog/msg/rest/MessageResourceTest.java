@@ -2,6 +2,7 @@ package de.dealog.msg.rest;
 
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Message;
+import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedList;
 import de.dealog.msg.service.MessageService;
@@ -13,6 +14,7 @@ import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -41,8 +43,23 @@ class MessageResourceTest {
                 .page(0).pageSize(10).pageCount(1).count(666).content(Arrays.asList(msg_one, msg_two, msg_three)).build();
         MessageService messageService = Mockito.mock(MessageService.class);
 
-        doReturn(pagedList).when(messageService).list(null, 0, 10);
+        doReturn(pagedList).when(messageService).find(null, 0, 10);
+
+        doReturn(Optional.of(msg_one)).when(messageService).find(UUID_ONE, MessageStatus.Published);
+
         QuarkusMock.installMockForType(messageService, MessageService.class);
+    }
+
+    @Test
+    void find() {
+        given()
+                .pathParam(MessageResource.PATH_IDENTIFIER, UUID_ONE)
+                .when().get(MessageResource.RESOURCE_PATH + "/{" + MessageResource.PATH_IDENTIFIER + "}")
+                .then()
+                .statusCode(200)
+                .body(containsString("\"identifier\":\"" + UUID_ONE + "\""))
+                .body(containsString("\"headline\":\"This is the headline\""))
+                .body(containsString("\"description\":\"This is the description\""));
     }
 
     @Test
