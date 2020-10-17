@@ -17,12 +17,12 @@ public class GeoRequest {
     /**
      *  The name of the HTTP longitude query parameter
      */
-    static final String LONGITUDE = "long";
+    public static final String LONGITUDE = "long";
 
     /**
      *  The name of the HTTP latitude query parameter
      */
-    static final String LATITUDE = "lat";
+    public static final String LATITUDE = "lat";
 
     @QueryParam("long")
     private Double longitude;
@@ -34,7 +34,6 @@ public class GeoRequest {
         Point<G2D>  point = null;
         if (longitude != null && latitude != null) {
            point = Geometries.mkPoint(new G2D(longitude, latitude), CoordinateReferenceSystems.WGS84);
-
         }
         return point;
     }

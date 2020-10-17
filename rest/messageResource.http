@@ -1,0 +1,8 @@
+### Find all messages with default page and page size
+GET http://localhost:8080/api/messages
+
+### Find all messages with default page and page size
+GET http://localhost:8080/api/messages?long=7.629602521164082&lat=51.451351676353546
+
+### Find one message within its identifier
+GET http://localhost:8080/api/messages/f0e99fc2-b79a-4c78-8ea3-ceed3ba77236
