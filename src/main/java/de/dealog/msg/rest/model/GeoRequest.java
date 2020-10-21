@@ -30,6 +30,11 @@ public class GeoRequest {
     @QueryParam("lat")
     private Double latitude;
 
+    /**
+     * Returns a point, if the longitude and latitude are present.
+     *
+     * @return the {@link Point} representing the long and lat exists.
+     */
     public Point<G2D> getPoint() {
         Point<G2D>  point = null;
         if (longitude != null && latitude != null) {

@@ -12,6 +12,8 @@ public interface Message {
 
     Geocode getGeocode();
 
+    String getRegionCode();
+
     MessageStatus getStatus();
 
     Date getPublishedAt();

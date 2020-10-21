@@ -6,6 +6,7 @@ import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedList;
 import de.dealog.msg.service.MessageService;
+import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +20,8 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
 
 @QuarkusTest
@@ -36,16 +39,16 @@ class MessageResourceTest {
 
     @BeforeAll
     public static void setup() {
-        Message msg_one = TestUtils.buildMessage(UUID_ONE, "This is the headline", "This is the description");
-        Message msg_two = TestUtils.buildMessage(UUID_TWO, "This is the second headline", "This is the second description");
-        Message msg_three = TestUtils.buildMessage(UUID_THREE, "This is the third headline", "This is the third description");
+        Message msg_one = TestUtils.buildMessage(UUID_ONE, "This is the headline", "This is the description", "091790134134");
+        Message msg_two = TestUtils.buildMessage(UUID_TWO, "This is the second headline", "This is the second description", "091790134134");
+        Message msg_three = TestUtils.buildMessage(UUID_THREE, "This is the third headline", "This is the third description", "091790134134");
         PagedList<? extends Message> pagedList = PagedList.<Message>builder()
                 .page(0).pageSize(10).pageCount(1).count(666).content(Arrays.asList(msg_one, msg_two, msg_three)).build();
         MessageService messageService = Mockito.mock(MessageService.class);
 
-        doReturn(pagedList).when(messageService).find(null, 0, 10);
+        doReturn(pagedList).when(messageService).findAll(any(QueryParams.class), anyInt(), anyInt());
 
-        doReturn(Optional.of(msg_one)).when(messageService).find(UUID_ONE, MessageStatus.Published);
+        doReturn(Optional.of(msg_one)).when(messageService).findOne(UUID_ONE, MessageStatus.Published);
 
         QuarkusMock.installMockForType(messageService, MessageService.class);
     }

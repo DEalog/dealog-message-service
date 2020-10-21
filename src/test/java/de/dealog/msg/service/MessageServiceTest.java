@@ -7,6 +7,7 @@ import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.persistence.repository.GeocodeRepository;
 import de.dealog.msg.persistence.repository.MessageRepository;
 import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
@@ -56,12 +57,12 @@ class MessageServiceTest {
         persisted.setIdentifier(identifier);
         when(messageRepository.findByIdentifierAndStatus(identifier, MessageStatus.Published)).thenReturn(persisted);
 
-        final Optional<Message> message = messageService.find(identifier, MessageStatus.Published);
+        final Optional<Message> message = messageService.findOne(identifier, MessageStatus.Published);
         assertThat(message.isPresent(), notNullValue());
         assertThat(message.get().getIdentifier(), is(identifier));
 
         when(messageRepository.findByIdentifier("667")).thenReturn(null);
-        final Optional<Message> doesNotExist = messageService.find("667", MessageStatus.Published);
+        final Optional<Message> doesNotExist = messageService.findOne("667", MessageStatus.Published);
         assertThat(doesNotExist.isPresent(), is(false));
     }
 
@@ -77,19 +78,20 @@ class MessageServiceTest {
         when(messageRepository.find(anyString(), any(Sort.class), any(Parameters.class))).thenReturn(query);
 
         Point<G2D> g2DPoint = Geometries.mkPoint(new G2D(8, 9), CoordinateReferenceSystems.WGS84);
-        messageService.find(g2DPoint, 0, 1);
+
+        messageService.findAll(QueryParams.builder().point(g2DPoint).build(), 0, 1);
 
         ArgumentCaptor<Parameters> parameterCaptor = ArgumentCaptor.forClass(Parameters.class);
         Mockito.verify(messageRepository, Mockito.times(1)).find(any(String.class), any(Sort.class), parameterCaptor.capture());
         Parameters parameters = parameterCaptor.getValue();
-        assertThat(g2DPoint, is(parameters.map().get(MessageService.POINT)));
+        assertThat(g2DPoint, is(parameters.map().get(MessageService.QUERY_PARAM_POINT)));
     }
 
     @Test
     void findMessages() {
-        Message msg_one = TestUtils.buildMessage("1", "This is the headline", "This is the description");
-        Message msg_two = TestUtils.buildMessage("2", "This is the second headline", "This is the second description");
-        Message msg_three = TestUtils.buildMessage("3", "This is the third headline", "This is the third description");
+        Message msg_one = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
+        Message msg_two = TestUtils.buildMessage("2", "This is the second headline", "This is the second description", "091790134134");
+        Message msg_three = TestUtils.buildMessage("3", "This is the third headline", "This is the third description", "091790134134");
         List<Message> messages = Arrays.asList(msg_one, msg_two, msg_three);
 
         PanacheQuery query = Mockito.mock(PanacheQuery.class);
@@ -102,7 +104,7 @@ class MessageServiceTest {
         when(query.count()).thenReturn(TOTAL_COUNT);
         when(messageRepository.find(anyString(), any(Sort.class), any(Parameters.class))).thenReturn(query);
 
-        PagedList<? extends Message> list = messageService.find(null, PAGE_NUMBER_ONE, PAGE_SIZE_3);
+        PagedList<? extends Message> list = messageService.findAll(QueryParams.builder().build(), PAGE_NUMBER_ONE, PAGE_SIZE_3);
 
         assertThat(PAGE_NUMBER_ONE, is(list.getPage()));
         assertThat(messages.size(), is(list.getPageSize()));
@@ -112,8 +114,8 @@ class MessageServiceTest {
 
     @Test
     void updateMessage() {
-        MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description");
-        MessageEntity updated = TestUtils.buildMessage("1", "This is a new headline", "This is a new description");
+        MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
+        MessageEntity updated = TestUtils.buildMessage("1", "This is a new headline", "This is a new description", "091790134134");
         when(messageRepository.findByIdentifier("1")).thenReturn(persisted);
         when(geocodeRepository.findByHash(anyString())).thenReturn(null);
         messageService.update(updated);
@@ -128,11 +130,11 @@ class MessageServiceTest {
 
     @Test
     void updateMessageStatus() {
-        MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description");
+        MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
         persisted.setStatus(MessageStatus.Published);
         when(messageRepository.findByIdentifier("1")).thenReturn(persisted);
 
-        Message superseded = TestUtils.buildMessage("1", "This is the headline", "This is the description");
+        Message superseded = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
         messageService.updateStatus(superseded.getIdentifier(), MessageStatus.Superseded);
 
         ArgumentCaptor<MessageEntity> messageCaptor = ArgumentCaptor.forClass(MessageEntity.class);

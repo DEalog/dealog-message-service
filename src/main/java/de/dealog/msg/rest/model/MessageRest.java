@@ -34,7 +34,12 @@ public class MessageRest {
     private String description;
 
     /**
-     * The createdDate
+     * The regional code "Amtlicher Regionalschlüssel" of the region where this message is valid
+     */
+    private String ars;
+
+    /**
+     * The date the message was published
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date publishedAt;

@@ -20,16 +20,16 @@ class MessageConverterTest {
 
     @Test
     void doForward() {
-        Message message = TestUtils.buildMessage("1", "This is the headline", "This is the description");
+        Message message = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
         MessageRest messageRest = messageConverter.doForward(message);
         assert messageRest != null;
         assertEquals(message.getIdentifier(), messageRest.getIdentifier());
         assertEquals(message.getHeadline(), messageRest.getHeadline());
         assertEquals(message.getDescription(), messageRest.getDescription());
 
-        Message msg_one = TestUtils.buildMessage("1", "This is the headline", "This is the description");
-        Message msg_two = TestUtils.buildMessage("10", "This is the second headline", "This is the second description");
-        Message msg_three = TestUtils.buildMessage("100", "This is the third headline", "This is the third description");
+        Message msg_one = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
+        Message msg_two = TestUtils.buildMessage("10", "This is the second headline", "This is the second description", "091790134134");
+        Message msg_three = TestUtils.buildMessage("100", "This is the third headline", "This is the third description", "091790134134");
         Iterable<MessageRest> messageRests = messageConverter.convertAll(Arrays.asList(msg_one, msg_two, msg_three));
 
         int size = Iterators.size(messageRests.iterator());
