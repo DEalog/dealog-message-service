@@ -27,14 +27,14 @@ public class ApiResource {
     Optional<List<String>> mayBeVersions;
 
     /**
-     * Request the supported status of a ....
-     * @param version API version and ...
-     * @return if the version is supported it returns {@link javax.ws.rs.core.Response.Status#NOT_FOUND},
-*              else it return {@link javax.ws.rs.core.Response.Status#NO_CONTENT}
+     * Request the support status of a version string.
+     *
+     * @param version the API version as string
+     * @return if supported {@link javax.ws.rs.core.Response.Status#NOT_FOUND}
+*              else {@link javax.ws.rs.core.Response.Status#NO_CONTENT}
      */
     @GET
     public Response unsupported(@NotEmpty @QueryParam(QUERY_PARAM_VERSION) final String version) {
-
         Response response = Response.status(Response.Status.NOT_FOUND).build();
 
         if (mayBeVersions.isPresent() && mayBeVersions.get().contains(version)) {

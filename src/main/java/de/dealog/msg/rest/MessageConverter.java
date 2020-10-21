@@ -16,6 +16,7 @@ public class MessageConverter extends Converter<Message, MessageRest> {
         messageRest.setIdentifier(message.getIdentifier());
         messageRest.setHeadline(message.getHeadline());
         messageRest.setDescription(message.getDescription());
+        messageRest.setArs(message.getRegionCode());
         messageRest.setPublishedAt(message.getPublishedAt());
         return messageRest;
     }
@@ -26,6 +27,7 @@ public class MessageConverter extends Converter<Message, MessageRest> {
         message.setIdentifier(messageRest.getIdentifier());
         message.setHeadline(messageRest.getHeadline());
         message.setDescription(messageRest.getDescription());
+        message.setRegionCode(messageRest.getArs());
         message.setPublishedAt(messageRest.getPublishedAt());
         return message;
     }

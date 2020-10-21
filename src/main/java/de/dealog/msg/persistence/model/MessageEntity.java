@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -31,10 +30,12 @@ public class MessageEntity extends PanacheEntity implements Message {
     private String description;
 
     @ToString.Exclude
-    @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "geocode_id")
     private GeocodeEntity geocode;
+
+    @Column(columnDefinition="TEXT")
+    private String regionCode;
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status;

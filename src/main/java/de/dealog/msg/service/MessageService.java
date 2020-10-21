@@ -7,14 +7,13 @@ import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.persistence.repository.GeocodeRepository;
 import de.dealog.msg.persistence.repository.MessageRepository;
 import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.geolatte.geom.G2D;
-import org.geolatte.geom.Point;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,7 +26,8 @@ import java.util.Optional;
 @Slf4j
 public class MessageService {
 
-    public static final String POINT = "point";
+    public static final String QUERY_PARAM_POINT = "point";
+    public static final String QUERY_PARAM_ARS = "regionCode";
 
     @Inject
     MessageRepository messageRepository;
@@ -35,21 +35,27 @@ public class MessageService {
     @Inject
     GeocodeRepository geocodeRepository;
 
-    public Optional<Message> find(final String identifier, final MessageStatus status) {
+    public Optional<Message> findOne(final String identifier, final MessageStatus status) {
         log.debug("Find message by identifier {} in status {}", identifier, status);
         final MessageEntity byIdentifier = messageRepository.findByIdentifierAndStatus(identifier, status);
         return Optional.ofNullable(byIdentifier);
     }
 
-    public PagedList<? extends Message> find(final Point<G2D> point, final int page, final int size) {
-        log.debug("List messages for page {}, size {} and point '{}' ...", page, size, point);
+    public PagedList<? extends Message> findAll(final QueryParams queryParams, final int page, final int size) {
+        log.debug("List messages for page {}, size {} and queryParams '{}' ...", page, size, queryParams);
         final PanacheQuery<MessageEntity> messageQuery;
         final StringBuilder queryBuilder = new StringBuilder("status = :status");
         final Parameters parameters = Parameters.with("status", MessageStatus.Published);
-        if (point != null) {
-            parameters.and(POINT, point);
+
+        queryParams.maybeRegionalCode().ifPresent(regionalCode -> {
+            parameters.and(QUERY_PARAM_ARS, regionalCode.getRegionalMuncipality());
+            queryBuilder.append(" AND regionCode = :regionCode");
+        });
+        queryParams.maybePoint().ifPresent(point -> {
+            parameters.and(QUERY_PARAM_POINT, point);
             queryBuilder.append(" AND within(:point, geocode.polygons) = true");
-        }
+        });
+
         messageQuery = messageRepository.find(queryBuilder.toString(), Sort.descending("publishedAt"), parameters);
 
         final List<MessageEntity> list = messageQuery.page(page, size).list();

@@ -13,10 +13,13 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class GeocodeEntity extends PanacheEntity implements Geocode {
 
+    /**
+     * MD5 hash of the WKT String representation of the {@link GeocodeEntity#polygons}
+     */
     private String hash;
 
     /**
