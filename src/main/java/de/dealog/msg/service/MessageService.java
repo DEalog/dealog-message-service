@@ -47,8 +47,8 @@ public class MessageService {
         final StringBuilder queryBuilder = new StringBuilder("status = :status");
         final Parameters parameters = Parameters.with("status", MessageStatus.Published);
 
-        queryParams.maybeRegionalCode().ifPresent(regionalCode -> {
-            parameters.and(QUERY_PARAM_ARS, regionalCode.getRegionalMuncipality());
+        queryParams.maybeArs().ifPresent(ars -> {
+            parameters.and(QUERY_PARAM_ARS, ars);
             queryBuilder.append(" AND regionCode = :regionCode");
         });
         queryParams.maybePoint().ifPresent(point -> {
