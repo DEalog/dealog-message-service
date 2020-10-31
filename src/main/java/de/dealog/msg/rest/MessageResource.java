@@ -2,10 +2,12 @@ package de.dealog.msg.rest;
 
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageStatus;
-import de.dealog.msg.rest.model.*;
+import de.dealog.msg.rest.model.GeoRequest;
+import de.dealog.msg.rest.model.MessageRest;
+import de.dealog.msg.rest.model.PageRequest;
+import de.dealog.msg.rest.model.PagedList;
 import de.dealog.msg.service.MessageService;
 import de.dealog.msg.service.model.QueryParams;
-import de.dealog.msg.service.model.RegionalCode;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -48,13 +50,10 @@ public class MessageResource {
             @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
 
-        RegionalCode regionalCode = null;
-        if (ars != null) {
-            regionalCode = regionalCodeConverter.doForward(ars);
-        }
+
         final QueryParams queryparams = QueryParams.builder()
+                .ars(ars)
                 .point(geoRequest.getPoint())
-                .regionalCode(regionalCode)
                 .build();
         final PagedList<? extends Message> messages = messageService.findAll(
                 queryparams, pageRequest.getPage(), pageRequest.getSize());
