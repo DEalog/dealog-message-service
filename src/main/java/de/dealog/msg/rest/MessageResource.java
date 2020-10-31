@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * REST Resource for {@link MessageRest}s
  */
-@Produces("application/de.dealog.service.message-" + MessageResource.API_VERSION)
+@Produces("application/vnd.de.dealog.service.message-" + MessageResource.API_VERSION)
 @Path(MessageResource.RESOURCE_PATH)
 public class MessageResource {
 
