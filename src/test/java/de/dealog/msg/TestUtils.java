@@ -16,6 +16,10 @@ import java.util.Date;
 
 public class TestUtils {
 
+    public static final String SIZE_FAILS = "size must be between";
+
+    public static final String PATTERN_FAILS = "must match";
+
     public static MessageEntity buildMessage(final String identifier, final String headline, final String description, final String regionCode) {
         final MessageEntity message = new MessageEntity();
         message.setIdentifier(identifier);

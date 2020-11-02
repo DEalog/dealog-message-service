@@ -22,6 +22,11 @@ public class PageRequest {
      */
     public static final String SIZE = "size";
 
+    /**
+     * The maximal page size
+     */
+    private static final int MAX_SIZE = 50;
+
     @QueryParam(PAGE)
     @DefaultValue("0")
     private int page;
@@ -29,4 +34,13 @@ public class PageRequest {
     @QueryParam(SIZE)
     @DefaultValue("10")
     private int size;
+
+    /**
+     * Return the requested page size.
+     *
+     * @return the page size or {@link #MAX_SIZE}
+     */
+    public int getSize() {
+        return (size > MAX_SIZE) ? MAX_SIZE : size;
+    }
 }

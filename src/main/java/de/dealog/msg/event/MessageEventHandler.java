@@ -1,6 +1,7 @@
 package de.dealog.msg.event;
 
 import de.dealog.common.model.MessageEvent;
+import de.dealog.msg.geometry.UnsupportedGeometryException;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.service.MessageService;
