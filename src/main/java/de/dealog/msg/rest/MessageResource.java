@@ -6,10 +6,14 @@ import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.MessageRest;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.MessageService;
 import de.dealog.msg.service.model.QueryParams;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
@@ -22,16 +26,28 @@ import java.util.concurrent.atomic.AtomicReference;
 @Path(MessageResource.RESOURCE_PATH)
 public class MessageResource {
 
-    public static final String RESOURCE_PATH = "/api/messages";
+    /**
+     * Current API version
+     */
     public static final String API_VERSION = "v1.0+json";
+
+    /**
+     * URI template parameter for ars
+     */
+    public static final String RESOURCE_PATH = "/api/messages";
+
+    /**
+     * URI path parameter for messages
+     */
     public static final String PATH_IDENTIFIER = "identifier";
+
+    /**
+     * URI template parameter for ars
+     */
     public static final String QUERY_ARS = "ars";
 
     @Inject
     MessageConverter messageConverter;
-
-    @Inject
-    RegionalCodeConverter regionalCodeConverter;
 
     @Inject
     MessageService messageService;
@@ -46,10 +62,9 @@ public class MessageResource {
      */
     @GET
     public Response findAll(
-            @QueryParam(QUERY_ARS) final String ars,
-            @BeanParam final GeoRequest geoRequest,
+            @Pattern(regexp="(^[0-9]{2,12})") @Size(min = 2, max = 12) @QueryParam(QUERY_ARS) final String ars,
+            @ValidGeoRequest @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
-
 
         final QueryParams queryparams = QueryParams.builder()
                 .ars(ars)
@@ -70,7 +85,7 @@ public class MessageResource {
      */
     @GET
     @Path("{" + PATH_IDENTIFIER + "}")
-    public Response find(@PathParam(PATH_IDENTIFIER) final String identifier) {
+    public Response find(@NotEmpty @PathParam(PATH_IDENTIFIER) final String identifier) {
 
         final Optional<Message> message = messageService.findOne(identifier, MessageStatus.Published);
         final AtomicReference<Response> response = new AtomicReference<>();

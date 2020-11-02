@@ -6,12 +6,16 @@ import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedList;
 import de.dealog.msg.rest.model.RegionRest;
+import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.RegionService;
 import de.dealog.msg.service.model.QueryParams;
 import de.dealog.msg.service.model.RegionalCode;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -45,7 +49,7 @@ public class RegionResource {
     /**
      * URI path for hierarchy
      */
-    private static final String PATH_HIERACHY ="hierarchy" ;
+    public static final String PATH_HIERACHY ="hierarchy" ;
 
     /**
      * Query parameter for name
@@ -73,12 +77,12 @@ public class RegionResource {
     @GET
     @Path(PATH_HIERACHY)
     public Response findHierachy(
-            @QueryParam(PATH_ARS) final String ars,
-            @BeanParam final GeoRequest geoRequest,
+            @Pattern(regexp="(^[0-9]{2,12})") @Size(min = 2, max = 12) @QueryParam(PATH_ARS) final String ars,
+            @ValidGeoRequest @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
         final Response build;
         RegionalCode regionalCode = null;
-        if (ars != null) {
+        if (StringUtils.isNotEmpty(ars)) {
             regionalCode = regionalCodeConverter.doForward(ars);
         }
         final QueryParams queryparams = QueryParams.builder()
@@ -109,7 +113,7 @@ public class RegionResource {
      */
     @GET
     public Response findAll(
-            @QueryParam(QUERY_NAME) final String name,
+            @Size(min = 3) @QueryParam(QUERY_NAME) final String name,
             @BeanParam final PageRequest pageRequest) {
 
         final PagedList<? extends Region> regions = regionService.findAll(

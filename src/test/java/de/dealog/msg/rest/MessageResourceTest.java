@@ -3,8 +3,10 @@ package de.dealog.msg.rest;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.MessageService;
 import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.test.junit.QuarkusMock;
@@ -76,5 +78,73 @@ class MessageResourceTest {
             .body(containsString("\"identifier\":\"" + UUID_ONE + "\""))
             .body(containsString("\"headline\":\"This is the headline\""))
             .body(containsString("\"description\":\"This is the description\""));
+    }
+
+    @Test
+    void findAllByArs() {
+        given()
+                .param("ars", "091790134134")
+                .param(PageRequest.PAGE, 0)
+                .param(PageRequest.SIZE, 10)
+                .when().get(MessageResource.RESOURCE_PATH)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void findAll_ArsMinSizeFails() {
+        given()
+                .param("ars", "0")
+                .param(PageRequest.PAGE, 0)
+                .param(PageRequest.SIZE, 10)
+                .when().get(MessageResource.RESOURCE_PATH)
+                .then()
+                .statusCode(400)
+                .body(containsString(TestUtils.SIZE_FAILS));
+    }
+
+    @Test
+    void findAll_ArsMaxSizeFails() {
+        given()
+                .param("ars", "0917901341345")
+                .param(PageRequest.PAGE, 0)
+                .param(PageRequest.SIZE, 10)
+                .when().get(MessageResource.RESOURCE_PATH)
+                .then()
+                .statusCode(400)
+                .body(containsString(TestUtils.SIZE_FAILS));
+    }
+
+    @Test
+    void findAll_ArsPatternFails() {
+        given()
+                .param("ars", "0a1b2c3d4f")
+                .param(PageRequest.PAGE, 0)
+                .param(PageRequest.SIZE, 10)
+                .when().get(MessageResource.RESOURCE_PATH)
+                .then()
+                .statusCode(400)
+                .body(containsString(TestUtils.PATTERN_FAILS));
+    }
+
+    @Test
+    void findAll_LatAndLongFails() {
+        given()
+                .param(PageRequest.PAGE, 0)
+                .param(PageRequest.SIZE, 10)
+                .param(GeoRequest.LATITUDE, 48.21667)
+                .when().get(MessageResource.RESOURCE_PATH)
+                .then()
+                .statusCode(400)
+                .body(containsString(ValidGeoRequest.MESSAGE));
+
+        given()
+                .param(PageRequest.PAGE, 0)
+                .param(PageRequest.SIZE, 10)
+                .param(GeoRequest.LONGITUDE, 11.26667)
+                .when().get(MessageResource.RESOURCE_PATH)
+                .then()
+                .statusCode(400)
+                .body(containsString(ValidGeoRequest.MESSAGE));
     }
 }
