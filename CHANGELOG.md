@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `NEW` Add single and list message request tracking
 - `NEW` Add REST parameter validations
 - `NEW` Add max page size to 50
 - `NEW` Add 0.0.0 as unsupported version

@@ -49,7 +49,6 @@ class MessageResourceTest {
         MessageService messageService = Mockito.mock(MessageService.class);
 
         doReturn(pagedList).when(messageService).findAll(any(QueryParams.class), anyInt(), anyInt());
-
         doReturn(Optional.of(msg_one)).when(messageService).findOne(UUID_ONE, MessageStatus.Published);
 
         QuarkusMock.installMockForType(messageService, MessageService.class);

@@ -1,4 +1,4 @@
-package de.dealog.msg.event;
+package de.dealog.msg.messaging.message;
 
 import com.google.common.base.Converter;
 import de.dealog.common.model.MessageEventPayload;

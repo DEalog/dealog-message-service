@@ -84,6 +84,10 @@
       <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx</artifactId>
+    </dependency>
+    <dependency>
       <groupId>de.dealog</groupId>
       <artifactId>dealog-common</artifactId>
       <version>${dealog-common.version}</version>

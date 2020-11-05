@@ -1,5 +1,6 @@
 package de.dealog.msg.rest;
 
+import de.dealog.msg.messaging.tracking.MessageTrackingBroadcaster;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageStatus;
 import de.dealog.msg.rest.model.GeoRequest;
@@ -9,6 +10,8 @@ import de.dealog.msg.rest.model.PagedList;
 import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.MessageService;
 import de.dealog.msg.service.model.QueryParams;
+import io.vertx.core.json.JsonArray;
+import io.vertx.mutiny.core.eventbus.EventBus;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +21,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * REST Resource for {@link MessageRest}s
@@ -52,6 +56,9 @@ public class MessageResource {
     @Inject
     MessageService messageService;
 
+    @Inject
+    EventBus bus;
+
     /**
      * Returns a paged list of {@link MessageRest}s. Can be filtered by {@link GeoRequest} or an ars
      *
@@ -72,6 +79,9 @@ public class MessageResource {
                 .build();
         final PagedList<? extends Message> messages = messageService.findAll(
                 queryparams, pageRequest.getPage(), pageRequest.getSize());
+
+        bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
+                new JsonArray(messages.getContent().stream().map(Message::getIdentifier).collect(Collectors.toList())));
         final Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
 
         return Response.ok(messagesRest).build();
@@ -90,7 +100,10 @@ public class MessageResource {
         final Optional<Message> message = messageService.findOne(identifier, MessageStatus.Published);
         final AtomicReference<Response> response = new AtomicReference<>();
         message.ifPresentOrElse(
-                m -> response.set(Response.ok(messageConverter.convert(m)).build()),
+                m -> {
+                    bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_SINGLE_REQUEST, m.getIdentifier());
+                    response.set(Response.ok(messageConverter.convert(m)).build());
+                },
                 () -> response.set(Response.status(Response.Status.NOT_FOUND).build()));
         return response.get();
     }
