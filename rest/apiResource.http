@@ -1,4 +1,4 @@
-### Is version 1.0 unsupported
-GET http://localhost:8080//api/unsupported?version=v0.666+json
+### Is version 0.0.0 unsupported
+GET http://localhost:8080//api/unsupported?version=0.0.0
 Accept: application/json
 

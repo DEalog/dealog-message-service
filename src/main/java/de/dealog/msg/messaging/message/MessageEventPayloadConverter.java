@@ -1,20 +1,13 @@
-package de.dealog.msg.event;
+package de.dealog.msg.messaging.message;
 
 import com.google.common.base.Converter;
 import de.dealog.common.model.MessageEventPayload;
+import de.dealog.msg.converter.UnsupportedConversionException;
+import de.dealog.msg.geometry.GeometryFactory;
 import de.dealog.msg.persistence.model.GeocodeEntity;
 import de.dealog.msg.persistence.model.MessageEntity;
-import de.dealog.msg.converter.UnsupportedConversionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.geolatte.geom.G2D;
-import org.geolatte.geom.Geometry;
-import org.geolatte.geom.MultiPolygon;
-import org.geolatte.geom.Polygon;
-import org.geolatte.geom.builder.DSL;
-import org.geolatte.geom.codec.Wkt;
-import org.geolatte.geom.codec.WktDecoder;
-import org.geolatte.geom.crs.CoordinateReferenceSystems;
 
 import javax.inject.Singleton;
 import java.util.Optional;
@@ -41,32 +34,10 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
     private GeocodeEntity accept(final String geocode) {
         return GeocodeEntity.builder()
             .hash(DigestUtils.md5Hex(geocode))
-            .polygons(convert(geocode))
+            .polygons(GeometryFactory.decodeWkt(geocode))
             .build();
     }
 
-    /**
-     * Convert a
-     * @param geocode ... WKT String
-     * @return ... a {@link MultiPolygon} object
-     * @throws UnsupportedGeometryException if its neither a polygon nor a multipolygon
-     */
-    private MultiPolygon<G2D> convert(final String geocode) {
-        final MultiPolygon<G2D> multiPolygon;
-        final WktDecoder decoder = Wkt.newDecoder(Wkt.Dialect.POSTGIS_EWKT_1);
-        final Geometry<G2D> decode = decoder.decode(geocode, CoordinateReferenceSystems.WGS84);
-        switch (decode.getGeometryType()) {
-            case POLYGON:
-                multiPolygon = DSL.multipolygon((Polygon<G2D>) decode);
-                break;
-            case MULTIPOLYGON:
-                multiPolygon = (MultiPolygon<G2D>) decode;
-                break;
-            default:
-                throw new UnsupportedGeometryException(String.format("Unsupported geometry %s", decode.getGeometryType()));
-        }
-        return multiPolygon;
-    }
 
     @Override
     protected MessageEventPayload doBackward(final MessageEntity message) {

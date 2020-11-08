@@ -11,6 +11,8 @@ import java.util.Optional;
 @ToString
 public class QueryParams {
 
+    private final String ars;
+
     private final RegionalCode regionalCode;
 
     private final Point<G2D> point;
@@ -21,5 +23,9 @@ public class QueryParams {
 
     public Optional<Point<G2D>> maybePoint() {
         return Optional.ofNullable(point);
+    }
+
+    public Optional<String> maybeArs() {
+        return Optional.ofNullable(ars);
     }
 }

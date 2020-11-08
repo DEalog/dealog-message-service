@@ -1,4 +1,4 @@
-package de.dealog.msg.event;
+package de.dealog.msg.geometry;
 
 public class UnsupportedGeometryException extends RuntimeException {
 

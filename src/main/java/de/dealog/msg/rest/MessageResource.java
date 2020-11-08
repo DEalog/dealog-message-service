@@ -1,17 +1,27 @@
 package de.dealog.msg.rest;
 
+import de.dealog.msg.messaging.tracking.MessageTrackingBroadcaster;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageStatus;
-import de.dealog.msg.rest.model.*;
+import de.dealog.msg.rest.model.GeoRequest;
+import de.dealog.msg.rest.model.MessageRest;
+import de.dealog.msg.rest.model.PageRequest;
+import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.MessageService;
 import de.dealog.msg.service.model.QueryParams;
-import de.dealog.msg.service.model.RegionalCode;
+import io.vertx.core.json.JsonArray;
+import io.vertx.mutiny.core.eventbus.EventBus;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * REST Resource for {@link MessageRest}s
@@ -20,19 +30,34 @@ import java.util.concurrent.atomic.AtomicReference;
 @Path(MessageResource.RESOURCE_PATH)
 public class MessageResource {
 
-    public static final String RESOURCE_PATH = "/api/messages";
+    /**
+     * Current API version
+     */
     public static final String API_VERSION = "v1.0+json";
+
+    /**
+     * URI template parameter for ars
+     */
+    public static final String RESOURCE_PATH = "/api/messages";
+
+    /**
+     * URI path parameter for messages
+     */
     public static final String PATH_IDENTIFIER = "identifier";
+
+    /**
+     * URI template parameter for ars
+     */
     public static final String QUERY_ARS = "ars";
 
     @Inject
     MessageConverter messageConverter;
 
     @Inject
-    RegionalCodeConverter regionalCodeConverter;
+    MessageService messageService;
 
     @Inject
-    MessageService messageService;
+    EventBus bus;
 
     /**
      * Returns a paged list of {@link MessageRest}s. Can be filtered by {@link GeoRequest} or an ars
@@ -44,20 +69,19 @@ public class MessageResource {
      */
     @GET
     public Response findAll(
-            @QueryParam(QUERY_ARS) final String ars,
-            @BeanParam final GeoRequest geoRequest,
+            @Pattern(regexp="(^[0-9]{2,12})") @Size(min = 2, max = 12) @QueryParam(QUERY_ARS) final String ars,
+            @ValidGeoRequest @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
 
-        RegionalCode regionalCode = null;
-        if (ars != null) {
-            regionalCode = regionalCodeConverter.doForward(ars);
-        }
         final QueryParams queryparams = QueryParams.builder()
+                .ars(ars)
                 .point(geoRequest.getPoint())
-                .regionalCode(regionalCode)
                 .build();
         final PagedList<? extends Message> messages = messageService.findAll(
                 queryparams, pageRequest.getPage(), pageRequest.getSize());
+
+        bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
+                new JsonArray(messages.getContent().stream().map(Message::getIdentifier).collect(Collectors.toList())));
         final Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
 
         return Response.ok(messagesRest).build();
@@ -71,12 +95,15 @@ public class MessageResource {
      */
     @GET
     @Path("{" + PATH_IDENTIFIER + "}")
-    public Response find(@PathParam(PATH_IDENTIFIER) final String identifier) {
+    public Response find(@NotEmpty @PathParam(PATH_IDENTIFIER) final String identifier) {
 
         final Optional<Message> message = messageService.findOne(identifier, MessageStatus.Published);
         final AtomicReference<Response> response = new AtomicReference<>();
         message.ifPresentOrElse(
-                m -> response.set(Response.ok(messageConverter.convert(m)).build()),
+                m -> {
+                    bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_SINGLE_REQUEST, m.getIdentifier());
+                    response.set(Response.ok(messageConverter.convert(m)).build());
+                },
                 () -> response.set(Response.status(Response.Status.NOT_FOUND).build()));
         return response.get();
     }
