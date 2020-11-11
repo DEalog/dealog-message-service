@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- 'CNG' Raise quarkus version to 1.9.2
 - `NEW` Add single and list message request tracking
 - `NEW` Add REST parameter validations
 - `NEW` Add max page size to 50

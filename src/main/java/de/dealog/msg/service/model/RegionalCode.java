@@ -1,7 +1,11 @@
 package de.dealog.msg.service.model;
 
 import com.google.common.base.Strings;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.Collections;

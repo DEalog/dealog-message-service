@@ -8,7 +8,8 @@
   <properties>
     <commons-lang3.version>3.11</commons-lang3.version>
     <dealog-common.version>1.0.0-SNAPSHOT</dealog-common.version>
-    <hibernate-spatial.version>5.4.22.Final</hibernate-spatial.version>
+    <guava.version>30.0-jre</guava.version>
+    <hibernate-spatial.version>5.4.23.Final</hibernate-spatial.version>
     <lombok.version>1.18.16</lombok.version>
     <maven.compiler.version>3.8.1</maven.compiler.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -17,9 +18,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>1.8.3.Final</quarkus.platform.version>
-    <quarkus-plugin.version>1.8.3.Final</quarkus-plugin.version>
-    <rest-assured.version>4.3.1</rest-assured.version>
+    <quarkus.platform.version>1.9.2.Final</quarkus.platform.version>
+    <quarkus-plugin.version>1.9.2.Final</quarkus-plugin.version>
+    <rest-assured.version>4.3.2</rest-assured.version>
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
   </properties>
   <dependencyManagement>
@@ -127,6 +128,11 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>${commons-lang3.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
     </dependency>
   </dependencies>
 
