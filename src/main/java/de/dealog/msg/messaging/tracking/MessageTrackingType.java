@@ -1,8 +1,11 @@
 package de.dealog.msg.messaging.tracking;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /**
  * The available message tracking types
  */
+@RegisterForReflection
 public enum MessageTrackingType {
 
     /**

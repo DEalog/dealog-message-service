@@ -1,5 +1,6 @@
 package de.dealog.msg.messaging.tracking;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@RegisterForReflection
 public class MessageTrackingPayload {
 
     /**
