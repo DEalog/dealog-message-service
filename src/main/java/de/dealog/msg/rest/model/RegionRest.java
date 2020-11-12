@@ -1,6 +1,7 @@
 package de.dealog.msg.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@RegisterForReflection
 public class RegionRest {
 
     /**

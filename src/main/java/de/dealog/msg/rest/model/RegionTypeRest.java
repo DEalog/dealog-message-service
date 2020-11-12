@@ -1,5 +1,6 @@
 package de.dealog.msg.rest.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Getter
+@RegisterForReflection
 public enum RegionTypeRest {
 
     COUNTRY("Bundesrepublik"),
