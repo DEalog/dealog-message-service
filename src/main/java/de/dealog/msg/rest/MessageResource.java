@@ -80,8 +80,10 @@ public class MessageResource {
         final PagedList<? extends Message> messages = messageService.findAll(
                 queryparams, pageRequest.getPage(), pageRequest.getSize());
 
-        bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
-                new JsonArray(messages.getContent().stream().map(Message::getIdentifier).collect(Collectors.toList())));
+        if(messages.getContent().size() > 0) {
+            bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
+                    new JsonArray(messages.getContent().stream().map(Message::getIdentifier).collect(Collectors.toList())));
+        }
         final Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
 
         return Response.ok(messagesRest).build();

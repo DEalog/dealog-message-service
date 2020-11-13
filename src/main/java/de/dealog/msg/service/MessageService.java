@@ -38,6 +38,7 @@ public class MessageService {
     public Optional<Message> findOne(final String identifier, final MessageStatus status) {
         log.debug("Find message by identifier {} in status {}", identifier, status);
         final MessageEntity byIdentifier = messageRepository.findByIdentifierAndStatus(identifier, status);
+        log.debug("... return {}. ", byIdentifier);
         return Optional.ofNullable(byIdentifier);
     }
 
