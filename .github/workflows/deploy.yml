@@ -32,7 +32,7 @@ jobs:
 
       - name: Set production env
         if: github.ref == 'refs/heads/main'
-        run: echo "CLUSTER_NAME=dealog"
+        run: echo "CLUSTER_NAME=dealog" >> ${GITHUB_ENV}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -59,4 +59,3 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           cluster: ${{ env.CLUSTER_NAME }}
           wait-for-service-stability: true
-
