@@ -26,7 +26,7 @@ public class MessageEventConsumer {
 
     @Incoming("messages")
     @Blocking
-    @Acknowledgment(Acknowledgment.Strategy.NONE)
+    @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
     public void process(final MessageEvent messageEvent) {
         log.debug("Received message event type '{}'", messageEvent.getType());
 
@@ -41,10 +41,8 @@ public class MessageEventConsumer {
             switch (messageEvent.getType()) {
                 case Imported:
                 case Created:
-                    handleCreateEvent(message);
-                    break;
                 case Updated:
-                    handleUpdateEvent(message);
+                    handleCreateOrUpdateEvent(message);
                     break;
                 case Superseded:
                     handleStatusUpdateEvent(message.getIdentifier(), MessageStatus.Superseded);
@@ -58,12 +56,9 @@ public class MessageEventConsumer {
         }
     }
 
-    private void handleCreateEvent(final Message message) {
-        messageService.create(message);
-    }
 
-    private void handleUpdateEvent(final Message message) {
-        messageService.update(message);
+    private void handleCreateOrUpdateEvent(final Message message) {
+        messageService.createOrUpdate(message);
     }
 
     private void handleStatusUpdateEvent(final String identifier, final MessageStatus status) {

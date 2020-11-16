@@ -12,18 +12,18 @@ import java.io.Serializable;
 @Getter
 @Setter
 @RegisterForReflection
-public class MessageTracking implements Serializable {
+public class MessagesTracking implements Serializable {
 
     private static final long serialVersionUID = 123L;
 
     /**
-     * The {@link MessageTrackingType} of the message tracking
+     * The {@link MessagesTrackingType} of the message tracking
      */
-    private MessageTrackingType type;
+    private MessagesTrackingType type;
 
     /**
      * The payload containing the message tracking
      */
-    private MessageTrackingPayload payload;
+    private MessagesTrackingPayload payload;
 
 }

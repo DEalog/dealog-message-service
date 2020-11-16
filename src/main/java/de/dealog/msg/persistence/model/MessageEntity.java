@@ -30,7 +30,7 @@ public class MessageEntity extends PanacheEntity implements Message {
     private String description;
 
     @ToString.Exclude
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "geocode_id")
     private GeocodeEntity geocode;
 

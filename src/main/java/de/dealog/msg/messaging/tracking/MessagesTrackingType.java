@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  * The available message tracking types
  */
 @RegisterForReflection
-public enum MessageTrackingType {
+public enum MessagesTrackingType {
 
     /**
      * A single message is requested

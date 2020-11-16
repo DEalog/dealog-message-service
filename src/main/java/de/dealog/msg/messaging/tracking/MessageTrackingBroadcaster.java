@@ -22,13 +22,13 @@ public class MessageTrackingBroadcaster {
     public static final String MESSAGE_LIST_REQUEST = "message-list-request";
 
     @Inject
-    @Channel("message-tracking")
-    Emitter<MessageTracking> viewEmitter;
+    @Channel("messages-tracking")
+    Emitter<MessagesTracking> viewEmitter;
 
     @ConsumeEvent(MESSAGE_SINGLE_REQUEST)
     public void consume(final String id) {
         if (StringUtils.isNotEmpty(id)) {
-            broadcast(Collections.singletonList(id), MessageTrackingType.SingleMessageRequested);
+            broadcast(Collections.singletonList(id), MessagesTrackingType.SingleMessageRequested);
         }
     }
 
@@ -36,19 +36,19 @@ public class MessageTrackingBroadcaster {
     public void consume(final JsonArray json) {
         if (json != null) {
             final List ids = json.getList();
-            broadcast(ids, MessageTrackingType.ListRequested);
+            broadcast(ids, MessagesTrackingType.ListRequested);
         }
     }
 
-    private void broadcast(final List<String> ids, final MessageTrackingType type) {
-        final MessageTrackingPayload payload = new MessageTrackingPayload();
+    private void broadcast(final List<String> ids, final MessagesTrackingType type) {
+        final MessagesTrackingPayload payload = new MessagesTrackingPayload();
         payload.setIds(ids);
         payload.setTrackedAt(new Date());
 
-        final MessageTracking messageTracking = new MessageTracking();
+        final MessagesTracking messageTracking = new MessagesTracking();
         messageTracking.setType(type);
         messageTracking.setPayload(payload);
-        log.debug("Send message tracking event '{}'", messageTracking.getType());
+        log.debug("Send messages tracking event '{}'", messageTracking.getType());
         viewEmitter.send(messageTracking);
     }
 }
