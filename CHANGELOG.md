@@ -1,6 +1,9 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `CNG` Change message geocode relation to optional
+- `CNG` Rename message tracking topic 
+- 'CNG' Message event type Imported/Created/Updated are processed with create or update
 - 'CNG' Raise quarkus version to 1.9.2
 - `NEW` Add single and list message request tracking
 - `NEW` Add REST parameter validations

@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @RegisterForReflection
-public class MessageTrackingPayload {
+public class MessagesTrackingPayload {
 
     /**
      * A list of tracked message ids

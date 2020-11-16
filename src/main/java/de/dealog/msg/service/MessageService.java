@@ -73,28 +73,29 @@ public class MessageService {
     }
 
     @Transactional
-    public void create(final Message message) {
+    public void createOrUpdate(final Message message) {
+        log.debug("Create or update message  {}" , message.getIdentifier());
         Validate.notNull(message, "The message should not be null");
         Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
 
-        log.debug("Create message {}" , message);
-        if (messageRepository.findByIdentifier(message.getIdentifier()) == null) {
+        final MessageEntity byIdentifier = messageRepository.findByIdentifier(message.getIdentifier());
+        if (byIdentifier == null) {
+            log.debug("Create message {}" , message);
             final MessageEntity messageEntity = (MessageEntity) message;
-            final GeocodeEntity geocodeEntity =
-                    Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
-                    .orElse((GeocodeEntity) message.getGeocode());
-            messageEntity.setGeocode(geocodeEntity);
+            Optional.ofNullable(message.getGeocode()).ifPresent(geocode -> enhanceGeocode(message, messageEntity));
             messageEntity.setStatus(MessageStatus.Published);
-            try {
-                messageRepository.persistAndFlush(messageEntity);
-            } catch (final Exception e) {
-                log.error("Create message {} failed!", message.getIdentifier(), e);
-            }
-
+            messageRepository.persistAndFlush(messageEntity);
         } else {
-            log.error("Found duplicate identifier {}", message.getIdentifier());
+            log.debug("Update message {}" , message);
+            byIdentifier.setHeadline(message.getHeadline());
+            byIdentifier.setDescription(message.getDescription());
+            Optional.ofNullable(message.getGeocode()).ifPresent(geocode -> enhanceGeocode(message, byIdentifier));
+            byIdentifier.setRegionCode(message.getRegionCode());
+            byIdentifier.setStatus(MessageStatus.Published);
+            messageRepository.persistAndFlush(byIdentifier);
         }
     }
+
 
     @Transactional
     public void update(final Message message) {
@@ -107,10 +108,7 @@ public class MessageService {
             byIdentifier.setHeadline(message.getHeadline());
             byIdentifier.setDescription(message.getDescription());
 
-            final GeocodeEntity geocodeEntity =
-                    Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
-                    .orElse((GeocodeEntity) message.getGeocode());
-            byIdentifier.setGeocode(geocodeEntity);
+            enhanceGeocode(message, byIdentifier);
             messageRepository.persistAndFlush(byIdentifier);
         } else {
             log.error("Message for identifier {} not found", message.getIdentifier());
@@ -131,5 +129,11 @@ public class MessageService {
         }else {
             log.error("Message for identifier {} not found.", identifier);
         }
+    }
+
+    private void enhanceGeocode(final Message message, final MessageEntity messageEntity) {
+        final GeocodeEntity geocodeEntity1 = Optional.ofNullable(geocodeRepository.findByHash(message.getGeocode().getHash()))
+                .orElse((GeocodeEntity) message.getGeocode());
+        messageEntity.setGeocode(geocodeEntity1);
     }
 }

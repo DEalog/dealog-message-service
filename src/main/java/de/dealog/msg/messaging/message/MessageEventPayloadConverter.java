@@ -8,6 +8,7 @@ import de.dealog.msg.persistence.model.GeocodeEntity;
 import de.dealog.msg.persistence.model.MessageEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Singleton;
 import java.util.Optional;
@@ -32,12 +33,11 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
     }
 
     private GeocodeEntity accept(final String geocode) {
-        return GeocodeEntity.builder()
+        return StringUtils.isNotEmpty(geocode) ? GeocodeEntity.builder()
             .hash(DigestUtils.md5Hex(geocode))
             .polygons(GeometryFactory.decodeWkt(geocode))
-            .build();
+            .build() : null;
     }
-
 
     @Override
     protected MessageEventPayload doBackward(final MessageEntity message) {
