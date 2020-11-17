@@ -9,6 +9,24 @@
     "allPublicFields" : true
   },
   {
+  "name": "de.dealog.common.model.MessageEvent",
+  "allDeclaredConstructors" : true,
+  "allPublicConstructors" : true,
+  "allDeclaredMethods" : true,
+  "allPublicMethods" : true,
+  "allDeclaredFields" : true,
+  "allPublicFields" : true
+  },
+  {
+    "name": "de.dealog.common.model.MessageEventPayload",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
+  },
+  {
     "name": "org.geolatte.geom.codec.PostgisWkbDecoder",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
