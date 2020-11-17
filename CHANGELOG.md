@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
++- 'CNG' Prefix content type of REST resources with 'vnd.'
 - `CNG` Change message geocode relation to optional
 - `CNG` Rename message tracking topic 
 - 'CNG' Message event type Imported/Created/Updated are processed with create or update

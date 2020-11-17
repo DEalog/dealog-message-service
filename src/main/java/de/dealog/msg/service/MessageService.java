@@ -96,7 +96,6 @@ public class MessageService {
         }
     }
 
-
     @Transactional
     public void update(final Message message) {
         Validate.notNull(message, "The message should not be null");

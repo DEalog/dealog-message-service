@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * REST Resource for {@link RegionRest}s
  */
-@Produces("application/de.dealog.service.regions-" + RegionResource.API_VERSION)
+@Produces("application/vnd.de.dealog.service.region-" + RegionResource.API_VERSION)
 @Path(RegionResource.RESOURCE_PATH)
 public class RegionResource {
 
