@@ -1,9 +1,9 @@
 package de.dealog.msg.messaging.message;
 
-import de.dealog.common.model.MessageEvent;
+import de.dealog.common.messaging.message.MessageEvent;
 import de.dealog.msg.geometry.UnsupportedGeometryException;
 import de.dealog.msg.persistence.model.Message;
-import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.common.model.Status;
 import de.dealog.msg.service.MessageService;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +45,10 @@ public class MessageEventConsumer {
                     handleCreateOrUpdateEvent(message);
                     break;
                 case Superseded:
-                    handleStatusUpdateEvent(message.getIdentifier(), MessageStatus.Superseded);
+                    handleStatusUpdateEvent(message.getIdentifier(), Status.Superseded);
                     break;
                 case Disposed:
-                    handleStatusUpdateEvent(message.getIdentifier(), MessageStatus.Disposed);
+                    handleStatusUpdateEvent(message.getIdentifier(), Status.Disposed);
                     break;
                 default:
                     log.debug("Handler for message event type  '{}' is not implemented.", messageEvent.getType());
@@ -61,7 +61,7 @@ public class MessageEventConsumer {
         messageService.createOrUpdate(message);
     }
 
-    private void handleStatusUpdateEvent(final String identifier, final MessageStatus status) {
+    private void handleStatusUpdateEvent(final String identifier, final Status status) {
         Validate.notEmpty(identifier, "The message identifier should not be null");
         messageService.updateStatus(identifier, status);
     }

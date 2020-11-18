@@ -2,6 +2,7 @@ package de.dealog.msg.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import de.dealog.common.model.Category;
 import de.dealog.msg.persistence.model.Message;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
@@ -26,6 +27,11 @@ public class MessageRest {
     private String identifier;
 
     /**
+     * The organization that publishes the message
+     */
+    private String organization;
+
+    /**
      * The headline
      */
     private String headline;
@@ -39,6 +45,11 @@ public class MessageRest {
      * The regional code "Amtlicher Regionalschlüssel" of the region where this message is valid
      */
     private String ars;
+
+    /**
+     * The category
+     */
+    private Category category;
 
     /**
      * The date the message was published

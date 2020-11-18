@@ -1,7 +1,8 @@
 package de.dealog.msg.messaging.message;
 
 import com.google.common.base.Converter;
-import de.dealog.common.model.MessageEventPayload;
+import de.dealog.common.messaging.message.MessageEventPayload;
+import de.dealog.common.model.Category;
 import de.dealog.msg.converter.UnsupportedConversionException;
 import de.dealog.msg.geometry.GeometryFactory;
 import de.dealog.msg.persistence.model.GeocodeEntity;
@@ -24,9 +25,11 @@ public class MessageEventPayloadConverter extends Converter<MessageEventPayload,
     protected MessageEntity doForward(final MessageEventPayload payload) {
         final MessageEntity message= new MessageEntity();
         message.setIdentifier(payload.getIdentifier());
+        message.setOrganization(payload.getOrganization());
         message.setHeadline(payload.getHeadline());
         message.setDescription(payload.getDescription());
         message.setRegionCode(payload.getArs());
+        message.setCategory(Optional.ofNullable(payload.getCategory()).orElse(Category.Other));
         message.setGeocode(Optional.ofNullable(payload.getGeocode()).map(this::accept).orElse(null));
         message.setPublishedAt(payload.getPublishedAt());
         return message;
