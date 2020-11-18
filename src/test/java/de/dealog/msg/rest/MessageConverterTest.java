@@ -26,6 +26,8 @@ class MessageConverterTest {
         assertEquals(message.getIdentifier(), messageRest.getIdentifier());
         assertEquals(message.getHeadline(), messageRest.getHeadline());
         assertEquals(message.getDescription(), messageRest.getDescription());
+        assertEquals(message.getCategory(), messageRest.getCategory());
+        assertEquals(TestUtils.MY_ORG, messageRest.getOrganization());
 
         Message msg_one = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
         Message msg_two = TestUtils.buildMessage("10", "This is the second headline", "This is the second description", "091790134134");
@@ -39,6 +41,8 @@ class MessageConverterTest {
         assertEquals(msg_three.getIdentifier(), messageRest_three.getIdentifier());
         assertEquals(msg_three.getHeadline(), messageRest_three.getHeadline());
         assertEquals(msg_three.getDescription(), messageRest_three.getDescription());
+        assertEquals(msg_three.getCategory(), messageRest_three.getCategory());
+        assertEquals(TestUtils.MY_ORG, message.getOrganization());
     }
 
     @Test
@@ -49,5 +53,7 @@ class MessageConverterTest {
         assertEquals(messageRest.getIdentifier(), message.getIdentifier());
         assertEquals(messageRest.getHeadline(), message.getHeadline());
         assertEquals(messageRest.getDescription(), message.getDescription());
+        assertEquals(messageRest.getCategory(), message.getCategory());
+        assertEquals(TestUtils.MY_ORG, message.getOrganization());
     }
 }

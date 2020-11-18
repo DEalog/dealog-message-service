@@ -2,7 +2,7 @@ package de.dealog.msg.rest;
 
 import de.dealog.msg.messaging.tracking.MessageTrackingBroadcaster;
 import de.dealog.msg.persistence.model.Message;
-import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.common.model.Status;
 import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.MessageRest;
 import de.dealog.msg.rest.model.PageRequest;
@@ -99,7 +99,7 @@ public class MessageResource {
     @Path("{" + PATH_IDENTIFIER + "}")
     public Response find(@NotEmpty @PathParam(PATH_IDENTIFIER) final String identifier) {
 
-        final Optional<Message> message = messageService.findOne(identifier, MessageStatus.Published);
+        final Optional<Message> message = messageService.findOne(identifier, Status.Published);
         final AtomicReference<Response> response = new AtomicReference<>();
         message.ifPresentOrElse(
                 m -> {

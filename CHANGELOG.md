@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- `NEW` Add organization and category field to message
 +- 'CNG' Prefix content type of REST resources with 'vnd.'
 - `CNG` Change message geocode relation to optional
 - `CNG` Rename message tracking topic 

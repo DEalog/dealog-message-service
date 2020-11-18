@@ -3,7 +3,7 @@ package de.dealog.msg.service;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageEntity;
-import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.common.model.Status;
 import de.dealog.msg.persistence.repository.GeocodeRepository;
 import de.dealog.msg.persistence.repository.MessageRepository;
 import de.dealog.msg.rest.model.PagedList;
@@ -55,14 +55,14 @@ class MessageServiceTest {
         final MessageEntity persisted = new MessageEntity();
         final String identifier = "eac3c557-eb9c-472c-8593-cc49098867f1";
         persisted.setIdentifier(identifier);
-        when(messageRepository.findByIdentifierAndStatus(identifier, MessageStatus.Published)).thenReturn(persisted);
+        when(messageRepository.findByIdentifierAndStatus(identifier, Status.Published)).thenReturn(persisted);
 
-        final Optional<Message> message = messageService.findOne(identifier, MessageStatus.Published);
+        final Optional<Message> message = messageService.findOne(identifier, Status.Published);
         assertThat(message.isPresent(), notNullValue());
         assertThat(message.get().getIdentifier(), is(identifier));
 
         when(messageRepository.findByIdentifier("667")).thenReturn(null);
-        final Optional<Message> doesNotExist = messageService.findOne("667", MessageStatus.Published);
+        final Optional<Message> doesNotExist = messageService.findOne("667", Status.Published);
         assertThat(doesNotExist.isPresent(), is(false));
     }
 
@@ -131,15 +131,15 @@ class MessageServiceTest {
     @Test
     void updateMessageStatus() {
         MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
-        persisted.setStatus(MessageStatus.Published);
+        persisted.setStatus(Status.Published);
         when(messageRepository.findByIdentifier("1")).thenReturn(persisted);
 
         Message superseded = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
-        messageService.updateStatus(superseded.getIdentifier(), MessageStatus.Superseded);
+        messageService.updateStatus(superseded.getIdentifier(), Status.Superseded);
 
         ArgumentCaptor<MessageEntity> messageCaptor = ArgumentCaptor.forClass(MessageEntity.class);
         Mockito.verify(messageRepository, Mockito.times(1)).persistAndFlush(messageCaptor.capture());
         MessageEntity capturedMessage = messageCaptor.getValue();
-        assertThat(MessageStatus.Superseded, is(capturedMessage.getStatus()));
+        assertThat(Status.Superseded, is(capturedMessage.getStatus()));
     }
 }

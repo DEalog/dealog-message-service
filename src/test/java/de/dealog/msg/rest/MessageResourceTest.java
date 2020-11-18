@@ -1,8 +1,9 @@
 package de.dealog.msg.rest;
 
+import de.dealog.common.model.Category;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Message;
-import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.common.model.Status;
 import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedList;
@@ -49,7 +50,7 @@ class MessageResourceTest {
         MessageService messageService = Mockito.mock(MessageService.class);
 
         doReturn(pagedList).when(messageService).findAll(any(QueryParams.class), anyInt(), anyInt());
-        doReturn(Optional.of(msg_one)).when(messageService).findOne(UUID_ONE, MessageStatus.Published);
+        doReturn(Optional.of(msg_one)).when(messageService).findOne(UUID_ONE, Status.Published);
 
         QuarkusMock.installMockForType(messageService, MessageService.class);
     }
@@ -62,6 +63,8 @@ class MessageResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("\"identifier\":\"" + UUID_ONE + "\""))
+                .body(containsString("\"category\":\"" + Category.Health.name() + "\""))
+                .body(containsString("\"organization\":\"" + TestUtils.MY_ORG + "\""))
                 .body(containsString("\"headline\":\"This is the headline\""))
                 .body(containsString("\"description\":\"This is the description\""));
     }
@@ -75,6 +78,8 @@ class MessageResourceTest {
             .then()
             .statusCode(200)
             .body(containsString("\"identifier\":\"" + UUID_ONE + "\""))
+            .body(containsString("\"category\":\"" + Category.Health.name() + "\""))
+            .body(containsString("\"organization\":\"" + TestUtils.MY_ORG + "\""))
             .body(containsString("\"headline\":\"This is the headline\""))
             .body(containsString("\"description\":\"This is the description\""));
     }

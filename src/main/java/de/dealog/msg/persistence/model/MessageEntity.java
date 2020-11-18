@@ -1,5 +1,7 @@
 package de.dealog.msg.persistence.model;
 
+import de.dealog.common.model.Category;
+import de.dealog.common.model.Status;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +25,10 @@ public class MessageEntity extends PanacheEntity implements Message {
 
     @NotEmpty
     @Column(columnDefinition="TEXT")
+    private String organization;
+
+    @NotEmpty
+    @Column(columnDefinition="TEXT")
     private String headline;
 
     @NotEmpty
@@ -38,7 +44,10 @@ public class MessageEntity extends PanacheEntity implements Message {
     private String regionCode;
 
     @Enumerated(EnumType.STRING)
-    private MessageStatus status;
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private Date publishedAt;
 

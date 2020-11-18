@@ -1,6 +1,6 @@
 [
   {
-    "name": "de.dealog.common.serialization.MessageEventDeserializer",
+    "name": "de.dealog.common.messaging.serialization.MessageEventDeserializer",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,
@@ -9,7 +9,7 @@
     "allPublicFields" : true
   },
   {
-  "name": "de.dealog.common.model.MessageEvent",
+  "name": "de.dealog.common.messaging.message.MessageEvent",
   "allDeclaredConstructors" : true,
   "allPublicConstructors" : true,
   "allDeclaredMethods" : true,
@@ -18,7 +18,7 @@
   "allPublicFields" : true
   },
   {
-    "name": "de.dealog.common.model.MessageEventPayload",
+    "name": "de.dealog.common.messaging.message.MessageEventPayload",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
     "allDeclaredMethods" : true,

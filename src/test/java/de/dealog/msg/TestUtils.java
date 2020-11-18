@@ -1,5 +1,6 @@
 package de.dealog.msg;
 
+import de.dealog.common.model.Category;
 import de.dealog.msg.persistence.model.RegionEntity;
 import de.dealog.msg.persistence.model.GeocodeEntity;
 import de.dealog.msg.persistence.model.MessageEntity;
@@ -16,6 +17,8 @@ import java.util.Date;
 
 public class TestUtils {
 
+    public static final String MY_ORG = "my organization";
+
     public static final String SIZE_FAILS = "size must be between";
 
     public static final String PATTERN_FAILS = "must match";
@@ -26,6 +29,8 @@ public class TestUtils {
         message.setDescription(description);
         message.setHeadline(headline);
         message.setRegionCode(regionCode);
+        message.setCategory(Category.Health);
+        message.setOrganization(MY_ORG);
         message.setGeocode(buildGeocode());
         message.setPublishedAt(new Date());
         return message;
@@ -44,6 +49,8 @@ public class TestUtils {
         messageRest.setIdentifier(identifier);
         messageRest.setDescription(description);
         messageRest.setHeadline(headline);
+        messageRest.setOrganization(MY_ORG);
+        messageRest.setCategory(Category.Health);
         messageRest.setPublishedAt(new Date());
         return messageRest;
     }

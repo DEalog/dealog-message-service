@@ -1,10 +1,15 @@
 package de.dealog.msg.persistence.model;
 
+import de.dealog.common.model.Category;
+import de.dealog.common.model.Status;
+
 import java.util.Date;
 
 public interface Message {
 
     String getIdentifier();
+
+    String getOrganization();
 
     String getHeadline();
 
@@ -14,7 +19,9 @@ public interface Message {
 
     String getRegionCode();
 
-    MessageStatus getStatus();
+    Status getStatus();
+
+    Category getCategory();
 
     Date getPublishedAt();
 

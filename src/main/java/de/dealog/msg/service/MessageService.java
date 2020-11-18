@@ -3,7 +3,7 @@ package de.dealog.msg.service;
 import de.dealog.msg.persistence.model.GeocodeEntity;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageEntity;
-import de.dealog.msg.persistence.model.MessageStatus;
+import de.dealog.common.model.Status;
 import de.dealog.msg.persistence.repository.GeocodeRepository;
 import de.dealog.msg.persistence.repository.MessageRepository;
 import de.dealog.msg.rest.model.PagedList;
@@ -35,7 +35,7 @@ public class MessageService {
     @Inject
     GeocodeRepository geocodeRepository;
 
-    public Optional<Message> findOne(final String identifier, final MessageStatus status) {
+    public Optional<Message> findOne(final String identifier, final Status status) {
         log.debug("Find message by identifier {} in status {}", identifier, status);
         final MessageEntity byIdentifier = messageRepository.findByIdentifierAndStatus(identifier, status);
         log.debug("... return {}. ", byIdentifier);
@@ -46,7 +46,7 @@ public class MessageService {
         log.debug("List messages for page {}, size {} and queryParams '{}' ...", page, size, queryParams);
         final PanacheQuery<MessageEntity> messageQuery;
         final StringBuilder queryBuilder = new StringBuilder("status = :status");
-        final Parameters parameters = Parameters.with("status", MessageStatus.Published);
+        final Parameters parameters = Parameters.with("status", Status.Published);
 
         queryParams.maybeArs().ifPresent(ars -> {
             parameters.and(QUERY_PARAM_ARS, ars);
@@ -83,7 +83,7 @@ public class MessageService {
             log.debug("Create message {}" , message);
             final MessageEntity messageEntity = (MessageEntity) message;
             Optional.ofNullable(message.getGeocode()).ifPresent(geocode -> enhanceGeocode(message, messageEntity));
-            messageEntity.setStatus(MessageStatus.Published);
+            messageEntity.setStatus(Status.Published);
             messageRepository.persistAndFlush(messageEntity);
         } else {
             log.debug("Update message {}" , message);
@@ -91,7 +91,7 @@ public class MessageService {
             byIdentifier.setDescription(message.getDescription());
             Optional.ofNullable(message.getGeocode()).ifPresent(geocode -> enhanceGeocode(message, byIdentifier));
             byIdentifier.setRegionCode(message.getRegionCode());
-            byIdentifier.setStatus(MessageStatus.Published);
+            byIdentifier.setStatus(Status.Published);
             messageRepository.persistAndFlush(byIdentifier);
         }
     }
@@ -115,7 +115,7 @@ public class MessageService {
     }
 
     @Transactional
-    public void updateStatus(final String identifier, final MessageStatus status) {
+    public void updateStatus(final String identifier, final Status status) {
         Validate.notEmpty(identifier, "The message identifier should not be empty");
         Validate.notNull(status, "The message status should not be null");
 
