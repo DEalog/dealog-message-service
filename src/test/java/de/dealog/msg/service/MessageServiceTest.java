@@ -1,5 +1,6 @@
 package de.dealog.msg.service;
 
+import de.dealog.common.model.Category;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageEntity;
@@ -116,9 +117,11 @@ class MessageServiceTest {
     void updateMessage() {
         MessageEntity persisted = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
         MessageEntity updated = TestUtils.buildMessage("1", "This is a new headline", "This is a new description", "091790134134");
+        updated.setCategory(Category.Fire);
+        updated.setOrganization("DEalog Team");
         when(messageRepository.findByIdentifier("1")).thenReturn(persisted);
         when(geocodeRepository.findByHash(anyString())).thenReturn(null);
-        messageService.update(updated);
+        messageService.createOrUpdate(updated);
 
         ArgumentCaptor<MessageEntity> messageCaptor = ArgumentCaptor.forClass(MessageEntity.class);
         Mockito.verify(messageRepository, Mockito.times(1)).persistAndFlush(messageCaptor.capture());
@@ -126,6 +129,8 @@ class MessageServiceTest {
         assertThat(updated.getIdentifier(), is(capturedMessage.getIdentifier()));
         assertThat(updated.getHeadline(), is(capturedMessage.getHeadline()));
         assertThat(updated.getDescription(), is(capturedMessage.getDescription()));
+        assertThat(updated.getOrganization(), is(capturedMessage.getOrganization()));
+        assertThat(Category.Fire, is(capturedMessage.getCategory()));
     }
 
     @Test

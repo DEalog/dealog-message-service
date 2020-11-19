@@ -89,28 +89,12 @@ public class MessageService {
             log.debug("Update message {}" , message);
             byIdentifier.setHeadline(message.getHeadline());
             byIdentifier.setDescription(message.getDescription());
+            byIdentifier.setOrganization(message.getOrganization());
+            byIdentifier.setCategory(message.getCategory());
             Optional.ofNullable(message.getGeocode()).ifPresent(geocode -> enhanceGeocode(message, byIdentifier));
             byIdentifier.setRegionCode(message.getRegionCode());
             byIdentifier.setStatus(Status.Published);
             messageRepository.persistAndFlush(byIdentifier);
-        }
-    }
-
-    @Transactional
-    public void update(final Message message) {
-        Validate.notNull(message, "The message should not be null");
-        Validate.notEmpty(message.getIdentifier(), "The message identifier should not be empty");
-
-        log.debug("Update message {}" , message);
-        final MessageEntity byIdentifier = messageRepository.findByIdentifier(message.getIdentifier());
-        if (byIdentifier != null) {
-            byIdentifier.setHeadline(message.getHeadline());
-            byIdentifier.setDescription(message.getDescription());
-
-            enhanceGeocode(message, byIdentifier);
-            messageRepository.persistAndFlush(byIdentifier);
-        } else {
-            log.error("Message for identifier {} not found", message.getIdentifier());
         }
     }
 
