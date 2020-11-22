@@ -1,14 +1,14 @@
 package de.dealog.msg.rest.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.ws.rs.QueryParam;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
 public class RegionRequest {
 
     /**
@@ -19,3 +19,5 @@ public class RegionRequest {
     @QueryParam(QUERY_ARS)
     private String ars;
 }
+
+

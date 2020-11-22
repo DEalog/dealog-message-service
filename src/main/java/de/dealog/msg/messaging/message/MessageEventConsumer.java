@@ -1,6 +1,7 @@
 package de.dealog.msg.messaging.message;
 
 import de.dealog.common.messaging.message.MessageEvent;
+import de.dealog.msg.converter.MessageEventPayloadConverter;
 import de.dealog.msg.geometry.UnsupportedGeometryException;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.common.model.Status;
@@ -18,11 +19,16 @@ import javax.inject.Inject;
 @Slf4j
 public class MessageEventConsumer {
 
-    @Inject
     MessageEventPayloadConverter messageEventPayloadConverter;
 
-    @Inject
     MessageService messageService;
+
+    @Inject
+    public MessageEventConsumer(final MessageEventPayloadConverter messageEventPayloadConverter,
+                                final MessageService messageService) {
+        this.messageEventPayloadConverter = messageEventPayloadConverter;
+        this.messageService = messageService;
+    }
 
     @Incoming("messages")
     @Blocking

@@ -1,8 +1,7 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.converter;
 
 import com.google.common.collect.Iterators;
 import de.dealog.msg.TestUtils;
-import de.dealog.msg.converter.UnsupportedConversionException;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.rest.model.RegionRest;
 import de.dealog.msg.rest.model.RegionTypeRest;
@@ -26,7 +25,7 @@ class RegionConverterTest {
     @Test
     void doForward() {
         final Region region = TestUtils.buildRegion("000000000000", "Deutschland", "Bundesrepublik");
-        final RegionRest regionRest = regionConverter.doForward(region);
+        final RegionRest regionRest = regionConverter.convert(region);
         assert regionRest != null;
         assertEquals(regionRest.getArs(), region.getCode());
         assertEquals(regionRest.getName(), region.getName());
@@ -49,6 +48,6 @@ class RegionConverterTest {
     @Test
     void doBackward() {
         RegionRest regionRest = TestUtils.buildRegionRest("000000000000", "Deutschland", RegionTypeRest.COUNTRY);
-        assertThrows(UnsupportedConversionException.class, () -> regionConverter.doBackward(regionRest));
+        assertThrows(UnsupportedConversionException.class, () -> regionConverter.reverse().convert(regionRest));
     }
 }

@@ -1,7 +1,6 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.converter;
 
 import com.google.common.base.Converter;
-import de.dealog.msg.converter.UnsupportedConversionException;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.rest.model.RegionRest;
 import de.dealog.msg.rest.model.RegionTypeRest;

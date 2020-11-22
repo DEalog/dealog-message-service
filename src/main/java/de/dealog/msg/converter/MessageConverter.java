@@ -1,4 +1,4 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.converter;
 
 import com.google.common.base.Converter;
 import de.dealog.msg.persistence.model.Message;

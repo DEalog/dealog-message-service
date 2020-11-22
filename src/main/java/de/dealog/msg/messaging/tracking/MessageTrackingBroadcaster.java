@@ -17,13 +17,22 @@ import java.util.List;
 @Slf4j
 public class MessageTrackingBroadcaster {
 
+    /**
+     * Single message request event
+     */
     public static final String MESSAGE_SINGLE_REQUEST = "message-single-request";
 
+    /**
+     * List message request event
+     */
     public static final String MESSAGE_LIST_REQUEST = "message-list-request";
 
+    private final Emitter<MessagesTracking> viewEmitter;
+
     @Inject
-    @Channel("messages-tracking")
-    Emitter<MessagesTracking> viewEmitter;
+    public MessageTrackingBroadcaster(@Channel("messages-tracking") final Emitter<MessagesTracking> viewEmitter) {
+        this.viewEmitter = viewEmitter;
+    }
 
     @ConsumeEvent(MESSAGE_SINGLE_REQUEST)
     public void consume(final String id) {
@@ -34,21 +43,22 @@ public class MessageTrackingBroadcaster {
 
     @ConsumeEvent(MESSAGE_LIST_REQUEST)
     public void consume(final JsonArray json) {
-        if (json != null) {
-            final List ids = json.getList();
-            broadcast(ids, MessagesTrackingType.ListRequested);
+        if (json != null && json.getList().size() > 0) {
+            broadcast(json.getList(), MessagesTrackingType.ListRequested);
         }
     }
 
     private void broadcast(final List<String> ids, final MessagesTrackingType type) {
-        final MessagesTrackingPayload payload = new MessagesTrackingPayload();
-        payload.setIds(ids);
-        payload.setTrackedAt(new Date());
+        final MessagesTrackingPayload payload = MessagesTrackingPayload.builder()
+                .ids(ids)
+                .trackedAt(new Date())
+                .build();
 
-        final MessagesTracking messageTracking = new MessagesTracking();
-        messageTracking.setType(type);
-        messageTracking.setPayload(payload);
-        log.debug("Send messages tracking event '{}'", messageTracking.getType());
+        final MessagesTracking messageTracking = MessagesTracking.builder()
+                .type(type)
+                .payload(payload)
+                .build();
+        log.debug("Broadcast messages tracking event '{}'", messageTracking.getType());
         viewEmitter.send(messageTracking);
     }
 }

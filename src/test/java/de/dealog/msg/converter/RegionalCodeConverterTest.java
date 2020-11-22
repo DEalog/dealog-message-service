@@ -1,5 +1,6 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.converter;
 
+import de.dealog.msg.converter.RegionalCodeConverter;
 import de.dealog.msg.service.model.RegionalCode;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class RegionalCodeConverterTest {
 
     @Test
     void convertMuncipality() {
-        final RegionalCode regionalCode = regionalCodeConverter.doForward("091790134134");
+        final RegionalCode regionalCode = regionalCodeConverter.convert("091790134134");
         assert regionalCode != null;
         assertThat(regionalCode.getCountry(), is("09"));
         assertThat(regionalCode.getState(), is("1"));
@@ -29,7 +30,7 @@ class RegionalCodeConverterTest {
 
     @Test
     void convertDistrict() {
-        final RegionalCode regionalCode = regionalCodeConverter.doForward("091790134");
+        final RegionalCode regionalCode = regionalCodeConverter.convert("091790134");
         assert regionalCode != null;
         assertThat(regionalCode.getCountry(), is("09"));
         assertThat(regionalCode.getState(), is("1"));
@@ -47,6 +48,6 @@ class RegionalCodeConverterTest {
                 .district("5410")
                 .muncipality("340")
                 .build();
-        assertThat(regionalCodeConverter.doBackward(regionalCode), is("120645410340"));
+        assertThat(regionalCodeConverter.reverse().convert(regionalCode), is("120645410340"));
     }
 }

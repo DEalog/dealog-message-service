@@ -1,4 +1,4 @@
-package de.dealog.msg.rest;
+package de.dealog.msg.converter;
 
 import com.google.common.collect.Iterators;
 import de.dealog.msg.TestUtils;
@@ -21,7 +21,7 @@ class MessageConverterTest {
     @Test
     void doForward() {
         Message message = TestUtils.buildMessage("1", "This is the headline", "This is the description", "091790134134");
-        MessageRest messageRest = messageConverter.doForward(message);
+        MessageRest messageRest = messageConverter.convert(message);
         assert messageRest != null;
         assertEquals(message.getIdentifier(), messageRest.getIdentifier());
         assertEquals(message.getHeadline(), messageRest.getHeadline());
@@ -48,7 +48,7 @@ class MessageConverterTest {
     @Test
     void doBackward() {
         MessageRest messageRest = TestUtils.buildMessageRest("1", "This is the headline", "This is the description");
-        Message message = messageConverter.doBackward(messageRest);
+        Message message = messageConverter.reverse().convert(messageRest);
         assert message != null;
         assertEquals(messageRest.getIdentifier(), message.getIdentifier());
         assertEquals(messageRest.getHeadline(), message.getHeadline());

@@ -1,17 +1,16 @@
 package de.dealog.msg.service;
 
+import de.dealog.common.model.Status;
 import de.dealog.msg.persistence.model.GeocodeEntity;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.persistence.model.MessageEntity;
-import de.dealog.common.model.Status;
 import de.dealog.msg.persistence.repository.GeocodeRepository;
 import de.dealog.msg.persistence.repository.MessageRepository;
-import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 
@@ -22,18 +21,21 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
-@NoArgsConstructor
 @Slf4j
 public class MessageService {
 
     public static final String QUERY_PARAM_POINT = "point";
     public static final String QUERY_PARAM_ARS = "regionCode";
 
-    @Inject
     MessageRepository messageRepository;
 
-    @Inject
     GeocodeRepository geocodeRepository;
+
+    @Inject
+    public MessageService(final MessageRepository messageRepository, final GeocodeRepository geocodeRepository) {
+        this.messageRepository = messageRepository;
+        this.geocodeRepository = geocodeRepository;
+    }
 
     public Optional<Message> findOne(final String identifier, final Status status) {
         log.debug("Find message by identifier {} in status {}", identifier, status);

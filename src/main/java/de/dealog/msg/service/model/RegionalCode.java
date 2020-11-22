@@ -1,10 +1,8 @@
 package de.dealog.msg.service.model;
 
 import com.google.common.base.Strings;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Arrays;
@@ -12,8 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Getter
 @ToString
@@ -21,27 +17,28 @@ public class RegionalCode {
     /**
      * 1.–2. Stelle   = Kennzahl des Bundeslandes
      */
-    private String country;
+    private final String country;
 
     /**
      * 3. Stelle      = Kennzahl des Regierungsbezirks; wenn nicht vorhanden: 0
      */
-    private String state;
+    private final String state;
 
     /**
      * 4.–5. Stelle   = Kennzahl des Landkreises oder der kreisfreien Stadt
      */
-    private String county;
+    private final String county;
 
     /**
      * 6.–9. Stelle   = Verbandsschlüssel
      */
-    private String district;
+    private final String district;
 
     /**
      * 10.–12. Stelle = Gemeindekennzahl
      */
-    private String muncipality;
+    private final String muncipality;
+
     public Optional<String>  getRegionalCountry(){
         return buildRegionalArs(Collections.singletonList(country));
     }

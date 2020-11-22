@@ -1,9 +1,8 @@
-package de.dealog.msg.messaging.message;
+package de.dealog.msg.converter;
 
 import de.dealog.common.messaging.message.MessageEventPayload;
 import de.dealog.common.model.Category;
 import de.dealog.msg.TestUtils;
-import de.dealog.msg.converter.UnsupportedConversionException;
 import de.dealog.msg.persistence.model.MessageEntity;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ class MessageEventPayloadConverterTest {
         payload.setArs("regionCode");
         payload.setOrganization("organization");
 
-        final MessageEntity message = messageEventPayloadConverter.doForward(payload);
+        final MessageEntity message = messageEventPayloadConverter.convert(payload);
         assertEquals(payload.getIdentifier(), message.getIdentifier());
         assertEquals(payload.getDescription(), message.getDescription());
         assertEquals(payload.getArs(), message.getRegionCode());
@@ -42,6 +41,6 @@ class MessageEventPayloadConverterTest {
     @Test
     void doBackward() {
         final MessageEntity message = TestUtils.buildMessage("1", "2", "3", "4");
-        assertThrows(UnsupportedConversionException.class, () -> messageEventPayloadConverter.doBackward(message));
+        assertThrows(UnsupportedConversionException.class, () -> messageEventPayloadConverter.reverse().convert(message));
     }
 }

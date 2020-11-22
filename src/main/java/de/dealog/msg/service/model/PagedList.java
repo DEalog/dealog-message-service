@@ -1,4 +1,4 @@
-package de.dealog.msg.rest.model;
+package de.dealog.msg.service.model;
 
 import lombok.Builder;
 import lombok.Getter;

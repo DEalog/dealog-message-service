@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- 'NEW' REST resources return a paged list, containing page, size, totalElements and totalPages
 - 'NEW' Add docker-compose for local and development profile
 - 'FIX' Persist updated organization and category fields on existing messages
 - `NEW` Add organization and category field to message

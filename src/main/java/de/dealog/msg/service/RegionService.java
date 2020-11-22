@@ -4,11 +4,10 @@ import com.google.common.base.Strings;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.persistence.model.RegionEntity;
 import de.dealog.msg.persistence.repository.RegionRepository;
-import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -20,14 +19,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-@NoArgsConstructor
 @Slf4j
 public class RegionService {
 
     public static final String QUERY_PARAM_POINT = "point";
 
-    @Inject
     RegionRepository regionRepository;
+
+    @Inject
+    public RegionService(final RegionRepository regionRepository) {
+        this.regionRepository = regionRepository;
+    }
 
     public Optional<Region> findOne(final String ars) {
         log.debug("Find region by ars {}", ars);

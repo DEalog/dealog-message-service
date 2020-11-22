@@ -1,16 +1,16 @@
 package de.dealog.msg.messaging.tracking;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 
 /**
- * The message tracking
+ * Model of the message tracking
  */
+@Builder
 @Getter
-@Setter
 @RegisterForReflection
 public class MessagesTracking implements Serializable {
 
@@ -19,11 +19,11 @@ public class MessagesTracking implements Serializable {
     /**
      * The {@link MessagesTrackingType} of the message tracking
      */
-    private MessagesTrackingType type;
+    private final MessagesTrackingType type;
 
     /**
      * The payload containing the message tracking
      */
-    private MessagesTrackingPayload payload;
+    private final MessagesTrackingPayload payload;
 
 }
