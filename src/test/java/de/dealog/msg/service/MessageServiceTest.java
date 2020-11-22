@@ -7,7 +7,7 @@ import de.dealog.msg.persistence.model.MessageEntity;
 import de.dealog.common.model.Status;
 import de.dealog.msg.persistence.repository.GeocodeRepository;
 import de.dealog.msg.persistence.repository.MessageRepository;
-import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;

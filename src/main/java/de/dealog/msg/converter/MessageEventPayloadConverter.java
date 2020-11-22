@@ -1,9 +1,8 @@
-package de.dealog.msg.messaging.message;
+package de.dealog.msg.converter;
 
 import com.google.common.base.Converter;
 import de.dealog.common.messaging.message.MessageEventPayload;
 import de.dealog.common.model.Category;
-import de.dealog.msg.converter.UnsupportedConversionException;
 import de.dealog.msg.geometry.GeometryFactory;
 import de.dealog.msg.persistence.model.GeocodeEntity;
 import de.dealog.msg.persistence.model.MessageEntity;

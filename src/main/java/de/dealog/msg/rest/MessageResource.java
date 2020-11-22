@@ -1,14 +1,18 @@
 package de.dealog.msg.rest;
 
+import com.google.common.base.Converter;
+import de.dealog.common.model.Status;
+import de.dealog.msg.converter.MessageConverter;
+import de.dealog.msg.converter.PagedListConverter;
 import de.dealog.msg.messaging.tracking.MessageTrackingBroadcaster;
 import de.dealog.msg.persistence.model.Message;
-import de.dealog.common.model.Status;
 import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.MessageRest;
 import de.dealog.msg.rest.model.PageRequest;
-import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.rest.model.PagedListRest;
 import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.MessageService;
+import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import io.vertx.core.json.JsonArray;
 import io.vertx.mutiny.core.eventbus.EventBus;
@@ -17,48 +21,49 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.ws.rs.*;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static de.dealog.msg.rest.model.RegionRequest.QUERY_ARS;
+
 /**
  * REST Resource for {@link MessageRest}s
  */
-@Produces("application/vnd.de.dealog.service.message-" + MessageResource.API_VERSION)
-@Path(MessageResource.RESOURCE_PATH)
+@Produces("application/vnd.de.dealog.service.message-" + ResourceConstants.API_VERSION)
+@Path(MessageConstants.RESOURCE_PATH)
 public class MessageResource {
 
-    /**
-     * Current API version
-     */
-    public static final String API_VERSION = "v1.0+json";
+    private final MessageConverter messageConverter;
 
-    /**
-     * URI template parameter for ars
-     */
-    public static final String RESOURCE_PATH = "/api/messages";
+    private final MessageService messageService;
 
-    /**
-     * URI path parameter for messages
-     */
-    public static final String PATH_IDENTIFIER = "identifier";
+    private final EventBus eventBus;
 
-    /**
-     * URI template parameter for ars
-     */
-    public static final String QUERY_ARS = "ars";
+    private PagedListConverter<Message, MessageRest> pagedListConverter;
 
     @Inject
-    MessageConverter messageConverter;
+    public MessageResource(final MessageConverter messageConverter,
+                          final MessageService messageService, final EventBus eventBus) {
+        this.messageConverter = messageConverter;
+        this.messageService = messageService;
+        this.eventBus = eventBus;
 
-    @Inject
-    MessageService messageService;
-
-    @Inject
-    EventBus bus;
-
+        this.pagedListConverter = new PagedListConverter<>() {
+            @Override
+            public void setContentConverter(final Converter<Message, MessageRest> messageConverter) {
+                super.setContentConverter(messageConverter);
+            }
+        };
+        this.pagedListConverter.setContentConverter(messageConverter);
+    }
     /**
      * Returns a paged list of {@link MessageRest}s. Can be filtered by {@link GeoRequest} or an ars
      *
@@ -81,12 +86,11 @@ public class MessageResource {
                 queryparams, pageRequest.getPage(), pageRequest.getSize());
 
         if(messages.getContent().size() > 0) {
-            bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
+            eventBus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
                     new JsonArray(messages.getContent().stream().map(Message::getIdentifier).collect(Collectors.toList())));
         }
-        final Iterable<MessageRest> messagesRest = messageConverter.convertAll(messages.getContent());
-
-        return Response.ok(messagesRest).build();
+        final PagedListRest<MessageRest> response = pagedListConverter.convert(messages);
+        return Response.ok(response).build();
     }
 
     /**
@@ -96,14 +100,14 @@ public class MessageResource {
      * @return if found the {@link Response.Status#OK} with {@link MessageRest}, else {@link Response.Status#NOT_FOUND}
      */
     @GET
-    @Path("{" + PATH_IDENTIFIER + "}")
-    public Response find(@NotEmpty @PathParam(PATH_IDENTIFIER) final String identifier) {
+    @Path("{" + MessageConstants.PATH__PARAM_IDENTIFIER + "}")
+    public Response find(@NotEmpty @PathParam(MessageConstants.PATH__PARAM_IDENTIFIER) final String identifier) {
 
         final Optional<Message> message = messageService.findOne(identifier, Status.Published);
         final AtomicReference<Response> response = new AtomicReference<>();
         message.ifPresentOrElse(
                 m -> {
-                    bus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_SINGLE_REQUEST, m.getIdentifier());
+                    eventBus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_SINGLE_REQUEST, m.getIdentifier());
                     response.set(Response.ok(messageConverter.convert(m)).build());
                 },
                 () -> response.set(Response.status(Response.Status.NOT_FOUND).build()));

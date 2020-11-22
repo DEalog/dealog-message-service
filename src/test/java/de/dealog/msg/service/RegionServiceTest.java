@@ -3,7 +3,7 @@ package de.dealog.msg.service;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.persistence.repository.RegionRepository;
-import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;

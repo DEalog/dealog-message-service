@@ -1,13 +1,18 @@
 package de.dealog.msg.rest;
 
+import com.google.common.base.Converter;
 import com.google.common.collect.Lists;
+import de.dealog.msg.converter.PagedListConverter;
+import de.dealog.msg.converter.RegionConverter;
+import de.dealog.msg.converter.RegionalCodeConverter;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.PageRequest;
-import de.dealog.msg.rest.model.PagedList;
+import de.dealog.msg.rest.model.PagedListRest;
 import de.dealog.msg.rest.model.RegionRest;
 import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.RegionService;
+import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import de.dealog.msg.service.model.RegionalCode;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +21,12 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.ws.rs.*;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,43 +37,33 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * REST Resource for {@link RegionRest}s
  */
-@Produces("application/vnd.de.dealog.service.region-" + RegionResource.API_VERSION)
-@Path(RegionResource.RESOURCE_PATH)
+@Produces("application/vnd.de.dealog.service.region-" + ResourceConstants.API_VERSION)
+@Path(RegionResourceConstants.RESOURCE_PATH)
 public class RegionResource {
 
-    /**
-     * Current API version
-     */
-    public static final String API_VERSION = "v1.0+json";
+    private final RegionConverter regionConverter;
 
-    /**
-     * Regions path
-     */
-    public static final String RESOURCE_PATH = "/api/regions";
+    private final RegionalCodeConverter regionalCodeConverter;
 
-    /**
-     * URI template parameter for ars
-     */
-    public static final String PATH_ARS = "ars";
+    private final RegionService regionService;
 
-    /**
-     * URI path for hierarchy
-     */
-    public static final String PATH_HIERACHY ="hierarchy" ;
-
-    /**
-     * Query parameter for name
-     */
-    private static final String QUERY_NAME = "name";
+    private PagedListConverter<Region, RegionRest> pagedListConverter;
 
     @Inject
-    RegionConverter regionConverter;
+    public RegionResource(final RegionConverter regionConverter,
+                               final RegionalCodeConverter regionalCodeConverter, final RegionService regionService) {
+        this.regionConverter = regionConverter;
+        this.regionalCodeConverter = regionalCodeConverter;
+        this.regionService = regionService;
 
-    @Inject
-    RegionalCodeConverter regionalCodeConverter;
-
-    @Inject
-    RegionService regionService;
+        this.pagedListConverter = new PagedListConverter<>() {
+            @Override
+            public void setContentConverter(final Converter<Region, RegionRest> regionConverter) {
+                super.setContentConverter(regionConverter);
+            }
+        };
+        this.pagedListConverter.setContentConverter(regionConverter);
+    }
 
     /**
      * Returns the region hierachy of an ARS
@@ -75,15 +75,15 @@ public class RegionResource {
      *          else {@link Response.Status#NOT_FOUND} or {@link Response.Status#BAD_REQUEST}
      */
     @GET
-    @Path(PATH_HIERACHY)
+    @Path(RegionResourceConstants.PATH_HIERACHY)
     public Response findHierachy(
-            @Pattern(regexp="(^[0-9]{2,12})") @Size(min = 2, max = 12) @QueryParam(PATH_ARS) final String ars,
+            @Pattern(regexp="(^[0-9]{2,12})") @Size(min = 2, max = 12) @QueryParam(RegionResourceConstants.PATH_PARAM_ARS) final String ars,
             @ValidGeoRequest @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
         final Response build;
         RegionalCode regionalCode = null;
         if (StringUtils.isNotEmpty(ars)) {
-            regionalCode = regionalCodeConverter.doForward(ars);
+            regionalCode = regionalCodeConverter.convert(ars);
         }
         final QueryParams queryparams = QueryParams.builder()
                 .point(geoRequest.getPoint())
@@ -113,14 +113,15 @@ public class RegionResource {
      */
     @GET
     public Response findAll(
-            @Size(min = 3) @QueryParam(QUERY_NAME) final String name,
+            @Size(min = 3) @QueryParam(RegionResourceConstants.QUERY_NAME) final String name,
             @BeanParam final PageRequest pageRequest) {
 
         final PagedList<? extends Region> regions = regionService.findAll(
                 name, pageRequest.getPage(), pageRequest.getSize());
-        final Iterable<RegionRest> messagesRest = regionConverter.convertAll(regions.getContent());
 
-        return Response.ok(messagesRest).build();
+        final PagedListRest<RegionRest> response = pagedListConverter.convert(regions);
+
+        return Response.ok(response).build();
     }
 
     /**
@@ -130,13 +131,13 @@ public class RegionResource {
      * @return if found the {@link Response.Status#OK} with {@link RegionRest}, else {@link Response.Status#NOT_FOUND}
      */
     @GET
-    @Path("{" + PATH_ARS + "}")
-    public Response find(@NotEmpty @PathParam(PATH_ARS) final String ars) {
+    @Path("{" + RegionResourceConstants.PATH_PARAM_ARS + "}")
+    public Response find(@NotEmpty @PathParam(RegionResourceConstants.PATH_PARAM_ARS) final String ars) {
 
-        final Optional<Region> region = regionService.findOne(ars);
+        final Optional<Region> mayBeRegion = regionService.findOne(ars);
         final AtomicReference<Response> response = new AtomicReference<>();
-        region.ifPresentOrElse(
-                r -> response.set(Response.ok(regionConverter.convert(r)).build()),
+        mayBeRegion.ifPresentOrElse(
+                region -> response.set(Response.ok(regionConverter.convert(region)).build()),
                 () -> response.set(Response.status(Response.Status.NOT_FOUND).build()));
         return response.get();
     }

@@ -1,18 +1,17 @@
 package de.dealog.msg.rest.model;
 
 import de.dealog.msg.geometry.GeometryFactory;
-import de.dealog.msg.rest.validations.ValidGeoRequest;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.geolatte.geom.G2D;
 import org.geolatte.geom.Point;
 
 import javax.ws.rs.QueryParam;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
 public class GeoRequest {
     /**
      *  The name of the HTTP longitude query parameter
