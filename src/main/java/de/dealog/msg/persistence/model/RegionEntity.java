@@ -10,6 +10,8 @@ import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Entity
@@ -48,4 +50,12 @@ public class RegionEntity extends PanacheEntity implements Region {
     @ToString.Exclude
     @Column(name = "geom")
     private MultiPolygon<G2D> geometries;
+
+    /**
+     * Description of the region
+     */
+    @Column(name = "regiontype")
+    @Enumerated(EnumType.STRING)
+    private RegionType type;
+
 }

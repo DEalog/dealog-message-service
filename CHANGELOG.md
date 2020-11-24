@@ -1,11 +1,12 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- 'NEW' Add region type to region and ability to find regions by its type
 - 'NEW' REST resources return a paged list, containing page, size, totalElements and totalPages
 - 'NEW' Add docker-compose for local and development profile
 - 'FIX' Persist updated organization and category fields on existing messages
 - `NEW` Add organization and category field to message
-+- 'CNG' Prefix content type of REST resources with 'vnd.'
+- 'CNG' Prefix content type of REST resources with 'vnd.'
 - `CNG` Change message geocode relation to optional
 - `CNG` Rename message tracking topic 
 - 'CNG' Message event type Imported/Created/Updated are processed with create or update
