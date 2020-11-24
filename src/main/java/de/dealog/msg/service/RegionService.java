@@ -3,6 +3,7 @@ package de.dealog.msg.service;
 import com.google.common.base.Strings;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.persistence.model.RegionEntity;
+import de.dealog.msg.persistence.model.RegionType;
 import de.dealog.msg.persistence.repository.RegionRepository;
 import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
@@ -37,15 +38,27 @@ public class RegionService {
         return Optional.ofNullable(byIdentifier);
     }
 
-    public PagedList<? extends Region> findAll(final String name, final int page, final int size) {
-        log.debug("List regions for page {}, size {} and name '{}' ...", page, size, name);
+    public PagedList<? extends Region> findAll(final String name,
+                                               final List<RegionType> types,
+                                               final int page,
+                                               final int size) {
+        log.debug("List regions by page {}, size {}, name '{}' and types '{}'...", page, size, name, types);
         final PanacheQuery<RegionEntity> regionQuery;
+        final Parameters parameters = new Parameters();
 
         String query = "";
         if(!Strings.isNullOrEmpty(name)) {
             query = "select r from RegionEntity r where lower(name) like '%" + name.toLowerCase() + "%'";
+            if (types.size() > 0) {
+                query += " and";
+            }
         }
-        regionQuery = regionRepository.find(query);
+        if (types.size() > 0) {
+            parameters.and("types", types);
+            query += " type in :types";
+        }
+
+        regionQuery = regionRepository.find(query, parameters);
 
         final List<RegionEntity> list = regionQuery.page(page, size).list();
 

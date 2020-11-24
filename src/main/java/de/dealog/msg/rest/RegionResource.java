@@ -2,14 +2,17 @@ package de.dealog.msg.rest;
 
 import com.google.common.base.Converter;
 import com.google.common.collect.Lists;
+import de.dealog.msg.converter.EnumConverter;
 import de.dealog.msg.converter.PagedListConverter;
 import de.dealog.msg.converter.RegionConverter;
 import de.dealog.msg.converter.RegionalCodeConverter;
 import de.dealog.msg.persistence.model.Region;
+import de.dealog.msg.persistence.model.RegionType;
 import de.dealog.msg.rest.model.GeoRequest;
 import de.dealog.msg.rest.model.PageRequest;
 import de.dealog.msg.rest.model.PagedListRest;
 import de.dealog.msg.rest.model.RegionRest;
+import de.dealog.msg.rest.model.RegionTypeRest;
 import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.RegionService;
 import de.dealog.msg.service.model.PagedList;
@@ -29,9 +32,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 
 /**
@@ -51,7 +57,8 @@ public class RegionResource {
 
     @Inject
     public RegionResource(final RegionConverter regionConverter,
-                               final RegionalCodeConverter regionalCodeConverter, final RegionService regionService) {
+                          final RegionalCodeConverter regionalCodeConverter,
+                          final RegionService regionService) {
         this.regionConverter = regionConverter;
         this.regionalCodeConverter = regionalCodeConverter;
         this.regionService = regionService;
@@ -108,16 +115,24 @@ public class RegionResource {
      * Returns a paged list of regions. Filtered by name
      *
      * @param name the name of the regions to find.
+     * @param typesRest an optional list of {@link RegionTypeRest}s to filter the regions
      * @param pageRequest a {@link PageRequest} containing the paging parameter
      * @return a paged list of {@link RegionRest}s
      */
     @GET
     public Response findAll(
             @Size(min = 3) @QueryParam(RegionResourceConstants.QUERY_NAME) final String name,
+            @QueryParam(RegionResourceConstants.QUERY_REGIONTYPES) final Optional<List<RegionTypeRest>> typesRest,
             @BeanParam final PageRequest pageRequest) {
 
+        final AtomicReference<List<RegionType>> types = new AtomicReference<>(Collections.emptyList());
+        typesRest.ifPresent(regionTypeRests -> types.set(
+                regionTypeRests.stream()
+                    .map(EnumConverter.regionTypeRestToRegionType::get)
+                    .collect(Collectors.toList())));
+
         final PagedList<? extends Region> regions = regionService.findAll(
-                name, pageRequest.getPage(), pageRequest.getSize());
+                name, types.get(), pageRequest.getPage(), pageRequest.getSize());
 
         final PagedListRest<RegionRest> response = pagedListConverter.convert(regions);
 

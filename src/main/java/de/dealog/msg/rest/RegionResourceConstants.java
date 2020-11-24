@@ -23,4 +23,9 @@ public final class RegionResourceConstants{
      * Query parameter for name
      */
     static final String QUERY_NAME = "name";
+
+    /**
+     * Query parameter for region types
+     */
+    static final String QUERY_REGIONTYPES = "regiontypes";
 }
