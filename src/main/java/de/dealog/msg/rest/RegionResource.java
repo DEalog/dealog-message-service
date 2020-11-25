@@ -115,19 +115,19 @@ public class RegionResource {
      * Returns a paged list of regions. Filtered by name
      *
      * @param name the name of the regions to find.
-     * @param typesRest an optional list of {@link RegionTypeRest}s to filter the regions
+     * @param maybeTypes an optional list of {@link RegionTypeRest}s to filter the regions
      * @param pageRequest a {@link PageRequest} containing the paging parameter
      * @return a paged list of {@link RegionRest}s
      */
     @GET
     public Response findAll(
             @Size(min = 3) @QueryParam(RegionResourceConstants.QUERY_NAME) final String name,
-            @QueryParam(RegionResourceConstants.QUERY_REGIONTYPES) final Optional<List<RegionTypeRest>> typesRest,
+            @QueryParam(RegionResourceConstants.QUERY_TYPE) final Optional<List<RegionTypeRest>> maybeTypes,
             @BeanParam final PageRequest pageRequest) {
 
         final AtomicReference<List<RegionType>> types = new AtomicReference<>(Collections.emptyList());
-        typesRest.ifPresent(regionTypeRests -> types.set(
-                regionTypeRests.stream()
+        maybeTypes.ifPresent(regionTypes -> types.set(
+                regionTypes.stream()
                     .map(EnumConverter.regionTypeRestToRegionType::get)
                     .collect(Collectors.toList())));
 
