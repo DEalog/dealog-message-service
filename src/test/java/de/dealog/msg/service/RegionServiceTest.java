@@ -36,7 +36,7 @@ class RegionServiceTest {
     RegionRepository regionRepository;
 
     @Test
-    void findRegions() {
+    void findHierachy() {
         Region region_one = TestUtils.buildRegion("000000000000", "Deutschland", "Bundesrepublik");
         Region region_two = TestUtils.buildRegion("03355", "Lüneburg", "Landkreis");
         Region region_three = TestUtils.buildRegion("010510044044", "Heide", "Stadt");
