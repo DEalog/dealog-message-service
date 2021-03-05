@@ -1,0 +1,8 @@
+### Find all regions with default page and page size
+GET http://localhost:8080/api/regions
+
+### Find regions within its name
+GET http://localhost:8080/api/regions?name=arnsberg
+
+### Find regions within its name and tyope
+GET http://localhost:8080/api/regions?name=arnsberg&type=MUNICIPALITY

@@ -9,6 +9,7 @@ import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
+import io.quarkus.panache.common.Sort;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -58,7 +59,7 @@ public class RegionService {
             query += " type in :types";
         }
 
-        regionQuery = regionRepository.find(query, parameters);
+        regionQuery = regionRepository.find(query, Sort.ascending("name"), parameters);
 
         final List<RegionEntity> list = regionQuery.page(page, size).list();
 
