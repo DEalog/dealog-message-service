@@ -82,11 +82,7 @@ public class RegionService {
 
         final List<String> codes = new ArrayList<>(Arrays.asList("000000000000"));
         queryParams.maybeRegionalCode().ifPresent(regionalCode -> {
-            regionalCode.getRegionalCountry().ifPresent(codes::add);
-            regionalCode.getRegionalState().ifPresent(codes::add);
-            regionalCode.getRegionalCounty().ifPresent(codes::add);
-            regionalCode.getRegionalDistrict().ifPresent(codes::add);
-            regionalCode.getRegionalMuncipality().ifPresent(codes::add);
+            codes.addAll(regionalCode.asList());
 
             queryBuilder.append(" ars IN (")
                     .append(codes.stream().map(c -> ("'" + c + "'")).collect(Collectors.joining(",")))
