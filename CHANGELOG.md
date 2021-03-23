@@ -1,6 +1,7 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- 'CNG' Find messages for the region code hierachy
 - 'NEW' Add region type to region and ability to find regions by its type
 - 'NEW' REST resources return a paged list, containing page, size, totalElements and totalPages
 - 'NEW' Add docker-compose for local and development profile

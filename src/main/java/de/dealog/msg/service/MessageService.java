@@ -17,15 +17,17 @@ import org.apache.commons.lang3.Validate;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @Slf4j
 public class MessageService {
 
     public static final String QUERY_PARAM_POINT = "point";
-    public static final String QUERY_PARAM_ARS = "regionCode";
 
     MessageRepository messageRepository;
 
@@ -50,10 +52,15 @@ public class MessageService {
         final StringBuilder queryBuilder = new StringBuilder("status = :status");
         final Parameters parameters = Parameters.with("status", Status.Published);
 
-        queryParams.maybeArs().ifPresent(ars -> {
-            parameters.and(QUERY_PARAM_ARS, ars);
-            queryBuilder.append(" AND regionCode = :regionCode");
+        final List<String> codes = new ArrayList<>(Arrays.asList("000000000000"));
+        queryParams.maybeRegionalCode().ifPresent(regionalCode -> {
+            codes.addAll(regionalCode.asList());
+
+            queryBuilder.append(" AND regionCode IN (")
+                    .append(codes.stream().map(c -> ("'" + c + "'")).collect(Collectors.joining(",")))
+                    .append(") ");
         });
+
         queryParams.maybePoint().ifPresent(point -> {
             parameters.and(QUERY_PARAM_POINT, point);
             queryBuilder.append(" AND within(:point, geocode.polygons) = true");

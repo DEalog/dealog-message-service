@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Builder
 @Getter
@@ -56,6 +53,16 @@ public class RegionalCode {
 
     public Optional<String> getRegionalMuncipality(){
         return buildRegionalArs(Arrays.asList(country, state, county, district, muncipality));
+    }
+
+    public List<String> asList(){
+        final List<String> codes = new ArrayList<>();
+        getRegionalCountry().ifPresent(codes::add);
+        getRegionalState().ifPresent(codes::add);
+        getRegionalCounty().ifPresent(codes::add);
+        getRegionalDistrict().ifPresent(codes::add);
+        getRegionalMuncipality().ifPresent(codes::add);
+        return codes;
     }
 
     private Optional<String> buildRegionalArs(final List<String> regionalCodes){

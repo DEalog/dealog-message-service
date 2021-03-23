@@ -25,7 +25,4 @@ public class QueryParams {
         return Optional.ofNullable(point);
     }
 
-    public Optional<String> maybeArs() {
-        return Optional.ofNullable(ars);
-    }
 }

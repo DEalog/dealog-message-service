@@ -4,6 +4,7 @@ import com.google.common.base.Converter;
 import de.dealog.common.model.Status;
 import de.dealog.msg.converter.MessageConverter;
 import de.dealog.msg.converter.PagedListConverter;
+import de.dealog.msg.converter.RegionalCodeConverter;
 import de.dealog.msg.messaging.tracking.MessageTrackingBroadcaster;
 import de.dealog.msg.persistence.model.Message;
 import de.dealog.msg.rest.model.GeoRequest;
@@ -14,8 +15,10 @@ import de.dealog.msg.rest.validations.ValidGeoRequest;
 import de.dealog.msg.service.MessageService;
 import de.dealog.msg.service.model.PagedList;
 import de.dealog.msg.service.model.QueryParams;
+import de.dealog.msg.service.model.RegionalCode;
 import io.vertx.core.json.JsonArray;
 import io.vertx.mutiny.core.eventbus.EventBus;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
@@ -43,6 +46,8 @@ public class MessageResource {
 
     private final MessageConverter messageConverter;
 
+    private final RegionalCodeConverter regionalCodeConverter;
+
     private final MessageService messageService;
 
     private final EventBus eventBus;
@@ -51,8 +56,10 @@ public class MessageResource {
 
     @Inject
     public MessageResource(final MessageConverter messageConverter,
-                          final MessageService messageService, final EventBus eventBus) {
+            RegionalCodeConverter regionalCodeConverter, final MessageService messageService,
+            final EventBus eventBus) {
         this.messageConverter = messageConverter;
+        this.regionalCodeConverter = regionalCodeConverter;
         this.messageService = messageService;
         this.eventBus = eventBus;
 
@@ -78,8 +85,13 @@ public class MessageResource {
             @ValidGeoRequest @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
 
+        RegionalCode regionalCode = null;
+        if (StringUtils.isNotEmpty(ars)) {
+            regionalCode = regionalCodeConverter.convert(ars);
+        }
+
         final QueryParams queryparams = QueryParams.builder()
-                .ars(ars)
+                .regionalCode(regionalCode)
                 .point(geoRequest.getPoint())
                 .build();
         final PagedList<? extends Message> messages = messageService.findAll(
