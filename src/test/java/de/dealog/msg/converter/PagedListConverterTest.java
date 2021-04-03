@@ -1,6 +1,7 @@
 package de.dealog.msg.converter;
 
 import com.google.common.base.Converter;
+import de.dealog.common.converter.UnsupportedConversionException;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.rest.model.PagedListRest;
@@ -10,7 +11,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

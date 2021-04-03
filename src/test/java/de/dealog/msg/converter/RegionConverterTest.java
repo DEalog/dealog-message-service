@@ -1,6 +1,7 @@
 package de.dealog.msg.converter;
 
 import com.google.common.collect.Iterators;
+import de.dealog.common.converter.UnsupportedConversionException;
 import de.dealog.msg.TestUtils;
 import de.dealog.msg.persistence.model.Region;
 import de.dealog.msg.rest.model.RegionRest;

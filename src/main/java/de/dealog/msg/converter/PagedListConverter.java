@@ -2,6 +2,7 @@ package de.dealog.msg.converter;
 
 import com.google.common.base.Converter;
 import com.google.common.collect.Lists;
+import de.dealog.common.converter.UnsupportedConversionException;
 import de.dealog.msg.rest.model.PagedListRest;
 import de.dealog.msg.service.model.PagedList;
 
