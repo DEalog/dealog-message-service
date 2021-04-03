@@ -1,5 +1,6 @@
 package de.dealog.msg.converter;
 
+import de.dealog.common.converter.UnsupportedConversionException;
 import de.dealog.common.messaging.message.MessageEventPayload;
 import de.dealog.common.model.Category;
 import de.dealog.msg.TestUtils;

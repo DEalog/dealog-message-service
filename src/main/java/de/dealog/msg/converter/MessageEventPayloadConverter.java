@@ -1,6 +1,7 @@
 package de.dealog.msg.converter;
 
 import com.google.common.base.Converter;
+import de.dealog.common.converter.UnsupportedConversionException;
 import de.dealog.common.messaging.message.MessageEventPayload;
 import de.dealog.common.model.Category;
 import de.dealog.msg.geometry.GeometryFactory;
