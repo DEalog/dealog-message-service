@@ -6,7 +6,7 @@
   <artifactId>dealog-message-service</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
-    <commons-lang3.version>3.11</commons-lang3.version>
+    <commons-lang3.version>3.12.0</commons-lang3.version>
     <dealog-common.version>1.0.0-SNAPSHOT</dealog-common.version>
     <guava.version>30.1.1-jre</guava.version>
     <hibernate-spatial.version>5.4.23.Final</hibernate-spatial.version>
