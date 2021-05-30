@@ -1,6 +1,9 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+<<<<<<< HEAD
+=======
+- 'CNG' Bump quarkus to 1.23.6 and GraalVM to 21.1.0
 - 'CNG' Fix typo hierachy -> hierarchy. In fieldnames, methods and comments
 - 'NEW' Enable REST data for messages and regions
 - 'CNG' Find messages for the region code hierarchy

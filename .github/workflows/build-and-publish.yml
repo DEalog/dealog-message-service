@@ -35,7 +35,7 @@ jobs:
         uses: ayltai/setup-graalvm@v1
         with:
           java-version: 11
-          graalvm-version: 20.2.0
+          graalvm-version: 21.1.0
 
       - name: Create settings.xml
         uses: whelk-io/maven-settings-xml-action@v9
