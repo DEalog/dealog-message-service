@@ -74,7 +74,7 @@ public class RegionService {
                 .build();
     }
 
-    public PagedList<? extends Region> findHierachy(final QueryParams queryParams, final int page, final int size) {
+    public PagedList<? extends Region> findHierarchy(final QueryParams queryParams, final int page, final int size) {
         log.debug("List regions for page {}, size {} and queryParams '{}' ...", page, size, queryParams);
         final PanacheQuery<RegionEntity> regionQuery;
         final StringBuilder queryBuilder = new StringBuilder();

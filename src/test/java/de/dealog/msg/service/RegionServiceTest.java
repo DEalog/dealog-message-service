@@ -36,7 +36,7 @@ class RegionServiceTest {
     RegionRepository regionRepository;
 
     @Test
-    void findHierachy() {
+    void findHierarchy() {
         Region region_one = TestUtils.buildRegion("000000000000", "Deutschland", "Bundesrepublik");
         Region region_two = TestUtils.buildRegion("03355", "Lüneburg", "Landkreis");
         Region region_three = TestUtils.buildRegion("010510044044", "Heide", "Stadt");
@@ -53,7 +53,7 @@ class RegionServiceTest {
         when(query.count()).thenReturn(TOTAL_COUNT);
         when(regionRepository.find(anyString(), any(Parameters.class))).thenReturn(query);
 
-        PagedList<? extends Region> list = regionService.findHierachy(QueryParams.builder().build(), PAGE_NUMBER_ONE, PAGE_SIZE_3);
+        PagedList<? extends Region> list = regionService.findHierarchy(QueryParams.builder().build(), PAGE_NUMBER_ONE, PAGE_SIZE_3);
 
         assertThat(PAGE_NUMBER_ONE, is(list.getPage()));
         assertThat(regions.size(), is(list.getPageSize()));
