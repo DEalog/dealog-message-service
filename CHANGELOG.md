@@ -1,8 +1,9 @@
 ## 1.0.0 (under development)
 This is the initial version setting up the base system
 
+- 'CNG' Fix typo hierachy -> hierarchy. In fieldnames, methods and comments
 - 'NEW' Enable REST data for messages and regions
-- 'CNG' Find messages for the region code hierachy
+- 'CNG' Find messages for the region code hierarchy
 - 'NEW' Add region type to region and ability to find regions by its type
 - 'NEW' REST resources return a paged list, containing page, size, totalElements and totalPages
 - 'NEW' Add docker-compose for local and development profile
@@ -19,7 +20,7 @@ This is the initial version setting up the base system
 - `NEW` Add 0.0.0 as unsupported version
 - `NEW` Add region code to message and ability to find messages by region code
 - `NEW` Add region resource to find regions by region code or location
-- `NEW` Add REST method to return a region hierachy by ars or location
+- `NEW` Add REST method to return a region hierarchy by ars or location
 - `NEW` Basic region model
 - 'CNG' Change to Java 11
 - `NEW` Add Message resource to find a message by its identifier 
@@ -28,8 +29,8 @@ This is the initial version setting up the base system
 - `NEW` Change Geocode to entity
 - `NEW` Add message event type "Disposed" and handler
 - `CNG` Geocode field as Multipolygon
-- `NEW` Implemente update and supersede messages service methods
-- `CNG` Message service returns only messags with message type published
+- `NEW` Implement update and supersede messages service methods
+- `CNG` Message service returns only messages with message type published
 - `NEW` Add MessageStatus field to message model
 - `NEW` Rest message request is sorted by publishedAt in descending order
 - `NEW` Add publishedAt field to message model

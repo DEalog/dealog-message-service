@@ -43,16 +43,16 @@ class RegionResourceTest {
                 .page(0).pageSize(10).pageCount(1).count(666).content(Arrays.asList(region_one, region_two, region_three)).build();
         final RegionService regionService = Mockito.mock(RegionService.class);
 
-        doReturn(pagedList).when(regionService).findHierachy(any(QueryParams.class), anyInt(), anyInt());
+        doReturn(pagedList).when(regionService).findHierarchy(any(QueryParams.class), anyInt(), anyInt());
 
         QuarkusMock.installMockForType(regionService, RegionService.class);
     }
 
     @Test
-    void findHierachy() {
+    void findHierarchy() {
        given()
                .param(RegionResourceConstants.PATH_PARAM_ARS, "091790134135")
-               .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERACHY)
+               .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERARCHY)
                .then()
                 .statusCode(200)
                 .body(startsWith("[{\"ars\":\"000000000000\""))
@@ -63,19 +63,19 @@ class RegionResourceTest {
     }
 
     @Test
-    void findHierachy_ArsMinSizeFails() {
+    void findHierarchy_ArsMinSizeFails() {
         given()
                 .param("ars", "0")
                 .param(PageRequest.PAGE, 0)
                 .param(PageRequest.SIZE, 10)
-                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERACHY)
+                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERARCHY)
                 .then()
                 .statusCode(400)
                 .body(containsString(TestUtils.SIZE_FAILS));
     }
 
     @Test
-    void findHierachy_ArsMaxSizeFails() {
+    void findHierarchy_ArsMaxSizeFails() {
         given()
                 .param("ars", "0917901341345")
                 .param(PageRequest.PAGE, 0)
@@ -87,29 +87,29 @@ class RegionResourceTest {
     }
 
     @Test
-    void findHierachy_ArsPatternFails() {
+    void findHierarchy_ArsPatternFails() {
         given()
                 .param("ars", "0a1b2c3d4f")
                 .param(PageRequest.PAGE, 0)
                 .param(PageRequest.SIZE, 10)
-                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERACHY)
+                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERARCHY)
                 .then()
                 .statusCode(400)
                 .body(containsString(TestUtils.PATTERN_FAILS));
     }
 
     @Test
-    void findHierachy_LatAndLongFails() {
+    void findHierarchy_LatAndLongFails() {
         given()
                 .param(GeoRequest.LATITUDE, 48.21667)
-                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERACHY)
+                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERARCHY)
                 .then()
                 .statusCode(400)
                 .body(containsString(ValidGeoRequest.MESSAGE));
 
         given()
                 .param(GeoRequest.LONGITUDE, 11.26667)
-                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERACHY)
+                .when().get(RegionResourceConstants.RESOURCE_PATH + "/" + RegionResourceConstants.PATH_HIERARCHY)
                 .then()
                 .statusCode(400)
                 .body(containsString(ValidGeoRequest.MESSAGE));

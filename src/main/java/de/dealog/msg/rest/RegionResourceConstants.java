@@ -12,7 +12,7 @@ public final class RegionResourceConstants{
     /**
      * URI path for hierarchy
      */
-    static final String PATH_HIERACHY = "hierarchy";
+    static final String PATH_HIERARCHY = "hierarchy";
 
     /**
      * URI template parameter for ars

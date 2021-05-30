@@ -73,17 +73,17 @@ public class RegionResource {
     }
 
     /**
-     * Returns the region hierachy of an ARS
+     * Returns the region hierarchy of an ARS
      *
      * @param ars an ars as string
      * @param geoRequest a {@link GeoRequest} containing the long and lat parameter
      * @param pageRequest a {@link PageRequest} containing the paging parameter
-     * @return the hierachy list of {@link RegionRest}s,
+     * @return the hierarchy list of {@link RegionRest}s,
      *          else {@link Response.Status#NOT_FOUND} or {@link Response.Status#BAD_REQUEST}
      */
     @GET
-    @Path(RegionResourceConstants.PATH_HIERACHY)
-    public Response findHierachy(
+    @Path(RegionResourceConstants.PATH_HIERARCHY)
+    public Response findHierarchy(
             @Pattern(regexp="(^[0-9]{2,12})") @Size(min = 2, max = 12) @QueryParam(RegionResourceConstants.PATH_PARAM_ARS) final String ars,
             @ValidGeoRequest @BeanParam final GeoRequest geoRequest,
             @BeanParam final PageRequest pageRequest) {
@@ -98,7 +98,7 @@ public class RegionResource {
                 .build();
 
         if (queryparams.maybeRegionalCode().isPresent() || queryparams.maybePoint().isPresent()) {
-            final PagedList<? extends Region> regions = regionService.findHierachy(
+            final PagedList<? extends Region> regions = regionService.findHierarchy(
                     queryparams, pageRequest.getPage(), pageRequest.getSize());
             final Iterable<RegionRest> regionRestIterator = regionConverter.convertAll(regions.getContent());
 
