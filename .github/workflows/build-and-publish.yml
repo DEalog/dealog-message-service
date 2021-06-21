@@ -38,7 +38,7 @@ jobs:
           graalvm-version: 21.1.0
 
       - name: Create settings.xml
-        uses: whelk-io/maven-settings-xml-action@v9
+        uses: whelk-io/maven-settings-xml-action@v18
         with:
           repositories: '[{ "id": "github", "name": "dealog-common", "url": "https://maven.pkg.github.com/dealog/dealog-common" }]'
           servers: '[{"id": "github", "username": "${{ secrets.SERVER_USERNAME }}", "password": "${{ secrets.SERVER_PASSWORD }}"}]'
