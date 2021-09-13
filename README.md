@@ -15,6 +15,7 @@ prerequisites needed to get the application up and running locally.
 ### Requirements
 
 - [Maven](https://maven.apache.org/) for building the project
+- [RabbitMQ](https://www.rabbitmq.com)
 - [OpenJDK >= 11.0.x](https://openjdk.java.net/) to develop and deploy the application
 - [Docker](https://docker.io) for running the code
 - Editor for coding
@@ -23,9 +24,8 @@ prerequisites needed to get the application up and running locally.
 
 ### ... in dev mode
 
-- Start an Apache Kafka
+- Start an RabbitMQ with AMQP 1.0 plugin. You can use DEalog RabbitMQ Dockerfile e.g. the (https://github.com/DEalog/rabbitmq-amqp1)
 
-You can use DEalog Kafka Development Cluster e.g. the (https://github.com/DEalog/dealog-kafka-dev-cluster)
 - Start Postgres
 ```
 . docker run --name "postgis" -p 25432:5432 -d -t kartoza/postgis
@@ -68,7 +68,7 @@ If you want to collaborate please follow this guide:
 The DEalog Message service uses the following (main) technologies, frameworks and libraries:
 
 - [Quarkus](https://quarkus.io/)
-- [APACHE KAFKA](https://kafka.apache.org)
+- [RabbitMQ](https://www.rabbitmq.com)
 - [Postgres](https://www.postgresql.org)
 - [Project Lombok](https://projectlombok.org/)
 

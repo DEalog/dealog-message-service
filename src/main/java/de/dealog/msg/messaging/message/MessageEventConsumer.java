@@ -1,19 +1,19 @@
 package de.dealog.msg.messaging.message;
 
 import de.dealog.common.messaging.message.MessageEvent;
+import de.dealog.common.model.Status;
 import de.dealog.msg.converter.MessageEventPayloadConverter;
 import de.dealog.msg.geometry.UnsupportedGeometryException;
 import de.dealog.msg.persistence.model.Message;
-import de.dealog.common.model.Status;
 import de.dealog.msg.service.MessageService;
 import io.smallrye.reactive.messaging.annotations.Blocking;
+import io.vertx.core.json.JsonObject;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @ApplicationScoped
 @Slf4j
@@ -33,7 +33,9 @@ public class MessageEventConsumer {
     @Incoming("messages")
     @Blocking
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public void process(final MessageEvent messageEvent) {
+    public void process(final JsonObject eventJson) {
+
+        MessageEvent messageEvent = eventJson.mapTo(MessageEvent.class);
         log.debug("Received message event type '{}'", messageEvent.getType());
 
         Message message = null;

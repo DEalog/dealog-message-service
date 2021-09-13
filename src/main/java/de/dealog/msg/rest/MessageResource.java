@@ -98,7 +98,7 @@ public class MessageResource {
                 queryparams, pageRequest.getPage(), pageRequest.getSize());
 
         if(messages.getContent().size() > 0) {
-            eventBus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
+            eventBus.send(MessageTrackingBroadcaster.MESSAGE_LIST_REQUEST,
                     new JsonArray(messages.getContent().stream().map(Message::getIdentifier).collect(Collectors.toList())));
         }
         final PagedListRest<MessageRest> response = pagedListConverter.convert(messages);
@@ -119,7 +119,7 @@ public class MessageResource {
         final AtomicReference<Response> response = new AtomicReference<>();
         message.ifPresentOrElse(
                 m -> {
-                    eventBus.sendAndForget(MessageTrackingBroadcaster.MESSAGE_SINGLE_REQUEST, m.getIdentifier());
+                    eventBus.send(MessageTrackingBroadcaster.MESSAGE_SINGLE_REQUEST, m.getIdentifier());
                     response.set(Response.ok(messageConverter.convert(m)).build());
                 },
                 () -> response.set(Response.status(Response.Status.NOT_FOUND).build()));
