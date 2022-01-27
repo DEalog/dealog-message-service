@@ -71,4 +71,3 @@ The DEalog Message service uses the following (main) technologies, frameworks an
 - [APACHE KAFKA](https://kafka.apache.org)
 - [Postgres](https://www.postgresql.org)
 - [Project Lombok](https://projectlombok.org/)
-
