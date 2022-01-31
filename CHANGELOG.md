@@ -1,8 +1,8 @@
-## 1.0.0 (under development)
-This is the initial version setting up the base system
+## 2.0.0
+- Change reactive messaging from kafka to amqp
+- Bump Quarkus from 1.13.6.Final to 2.2.2.Final
 
-<<<<<<< HEAD
-=======
+## 1.0.0 (under development)
 - 'CNG' Bump quarkus to 1.23.6 and GraalVM to 21.1.0
 - 'CNG' Fix typo hierachy -> hierarchy. In fieldnames, methods and comments
 - 'NEW' Enable REST data for messages and regions
