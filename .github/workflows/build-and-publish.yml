@@ -50,7 +50,7 @@ jobs:
           ./mvnw package --file pom.xml --batch-mode --settings ~/.m2/settings.xml -Pnative
 
       - name: Create artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: message-service
           path: |
@@ -102,7 +102,7 @@ jobs:
         run: echo ${{ steps.docker-build.outputs.FULL_IMAGE_NAME }} >> ./full_image_name.txt
 
       - name: Create artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dockerized-message-service
           path: |
